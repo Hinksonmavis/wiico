@@ -4,49 +4,55 @@ import { useEffect } from "react";
 
 export default function SecurityProtection() {
     useEffect(() => {
-        const handleContextMenu = (e: MouseEvent) => {
-            e.preventDefault();
+        const handleContextMenu = (event: MouseEvent) => {
+            event.preventDefault();
         };
 
-        const handleKeyDown = (e: KeyboardEvent) => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            const key = event.key.toLowerCase();
+
             // F12
-            if (e.key === "F12") {
-                e.preventDefault();
+            if (event.key === "F12") {
+                event.preventDefault();
+                return;
             }
 
             // Ctrl + Shift + I
             if (
-                e.ctrlKey &&
-                e.shiftKey &&
-                e.key.toLowerCase() === "i"
+                event.ctrlKey &&
+                event.shiftKey &&
+                key === "i"
             ) {
-                e.preventDefault();
+                event.preventDefault();
+                return;
             }
 
             // Ctrl + Shift + J
             if (
-                e.ctrlKey &&
-                e.shiftKey &&
-                e.key.toLowerCase() === "j"
+                event.ctrlKey &&
+                event.shiftKey &&
+                key === "j"
             ) {
-                e.preventDefault();
+                event.preventDefault();
+                return;
             }
 
             // Ctrl + Shift + C
             if (
-                e.ctrlKey &&
-                e.shiftKey &&
-                e.key.toLowerCase() === "c"
+                event.ctrlKey &&
+                event.shiftKey &&
+                key === "c"
             ) {
-                e.preventDefault();
+                event.preventDefault();
+                return;
             }
 
             // Ctrl + U
             if (
-                e.ctrlKey &&
-                e.key.toLowerCase() === "u"
+                event.ctrlKey &&
+                key === "u"
             ) {
-                e.preventDefault();
+                event.preventDefault();
             }
         };
 
