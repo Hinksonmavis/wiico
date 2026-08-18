@@ -14,20 +14,21 @@ import {
 } from "lucide-react";
 
 import { useAuthStore } from "@/app/store/auth.store";
+
 import {
     RegisterFormData,
     registerSchema,
 } from "@/app/schema/auth.schema";
+
 import { authService } from "@/app/services/clientServices/auth.service";
+
 import { ROUTES } from "@/app/constants/routes";
 
 import TextField from "../ui/TextField";
 import PasswordField from "../ui/PasswordField";
 import SubmitButton from "../ui/SubmitButton";
 import RegisterFormFooter from "../ui/RegisterFormFooter";
-
-import { walletService } from "@/app/services/clientServices/wallet.service";
-import { useWalletStore } from "@/app/store/wallet.store";
+import RegistrationSuccessModal from "../ui/RegistrationSuccessModal";
 
 export default function RegisterForm() {
     const router = useRouter();
@@ -39,6 +40,12 @@ export default function RegisterForm() {
 
     const [loading, setLoading] =
         useState(false);
+
+    const [registrationSuccess, setRegistrationSuccess] =
+        useState(false);
+
+    const [registeredPhone, setRegisteredPhone] =
+        useState("");
 
     const {
         register,
@@ -59,6 +66,7 @@ export default function RegisterForm() {
 
     /**
      * Auto-fill referral code.
+     *
      * Example:
      * /register?ref=NX-4K8P2A
      */
@@ -75,7 +83,10 @@ export default function RegisterForm() {
                 },
             );
         }
-    }, [searchParams, setValue]);
+    }, [
+        searchParams,
+        setValue,
+    ]);
 
     const onSubmit = async (
         values: RegisterFormData,
@@ -89,7 +100,8 @@ export default function RegisterForm() {
                     password: values.password,
                     confirmPassword:
                         values.confirmPassword,
-                    referral: values.referral,
+                    referral:
+                        values.referral,
                     country:
                         values.country?.trim() ||
                         "Nigeria",
@@ -102,19 +114,30 @@ export default function RegisterForm() {
             } = response.data;
 
             /**
-             * Save authenticated session
+             * Save authenticated session.
              */
             login(
                 accessToken,
                 refreshToken,
             );
 
-            toast.success(
-                "Registration successful.",
+            /**
+             * Store the registered phone
+             * for the success modal.
+             */
+            setRegisteredPhone(
+                user?.phone ??
+                    values.phone,
             );
 
-            router.push(
-                ROUTES.DASHBOARD,
+            /**
+             * Show success modal instead
+             * of redirecting immediately.
+             */
+            setRegistrationSuccess(true);
+
+            toast.success(
+                "Account created successfully.",
             );
         } catch (error: any) {
             toast.error(
@@ -126,70 +149,95 @@ export default function RegisterForm() {
         }
     };
 
+    const handleContinue = () => {
+        router.push(
+            ROUTES.DASHBOARD,
+        );
+    };
+
     return (
-        <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="space-y-5 p-6 flex flex-col gap-2"
-        >
-            <TextField
-                label="Phone Number"
-                type="tel"
-                placeholder="08012345678"
-                icon={
-                    <Phone className="h-4 w-4" />
-                }
-                error={errors.phone?.message}
-                {...register("phone")}
-            />
-
-            <PasswordField
-                label="Password"
-                placeholder="Create a password"
-                error={errors.password?.message}
-                {...register("password")}
-            />
-
-            <PasswordField
-                label="Confirm Password"
-                placeholder="Confirm password"
-                error={
-                    errors.confirmPassword
-                        ?.message
-                }
-                {...register(
-                    "confirmPassword",
-                )}
-            />
-
-            <TextField
-                label="Country"
-                placeholder="Nigeria"
-                hint="Leave blank if you're in Nigeria."
-                error={errors.country?.message}
-                {...register("country")}
-            />
-
-            <TextField
-                label="Invitation (Optional)"
-                placeholder="Example: NX-4K8P2A"
-                icon={
-                    <Gift className="h-4 w-4" />
-                }
-                className="uppercase"
-                error={
-                    errors.referral?.message
-                }
-                {...register("referral")}
-            />
-
-            <SubmitButton
-                loading={loading}
-                loadingText="Creating account..."
+        <>
+            <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="
+                    flex flex-col
+                    gap-2
+                    space-y-5
+                    p-6
+                "
             >
-                Create Account
-            </SubmitButton>
+                <TextField
+                    label="Phone Number"
+                    type="tel"
+                    placeholder="08012345678"
+                    icon={
+                        <Phone className="h-4 w-4" />
+                    }
+                    error={
+                        errors.phone?.message
+                    }
+                    {...register("phone")}
+                />
 
-            <RegisterFormFooter />
-        </form>
+                <PasswordField
+                    label="Password"
+                    placeholder="Create a password"
+                    error={
+                        errors.password?.message
+                    }
+                    {...register("password")}
+                />
+
+                <PasswordField
+                    label="Confirm Password"
+                    placeholder="Confirm password"
+                    error={
+                        errors.confirmPassword
+                            ?.message
+                    }
+                    {...register(
+                        "confirmPassword",
+                    )}
+                />
+
+                <TextField
+                    label="Country"
+                    placeholder="Nigeria"
+                    hint="Leave blank if you're in Nigeria."
+                    error={
+                        errors.country?.message
+                    }
+                    {...register("country")}
+                />
+
+                <TextField
+                    label="Invitation (Optional)"
+                    placeholder="Example: NX-4K8P2A"
+                    icon={
+                        <Gift className="h-4 w-4" />
+                    }
+                    className="uppercase"
+                    error={
+                        errors.referral?.message
+                    }
+                    {...register("referral")}
+                />
+
+                <SubmitButton
+                    loading={loading}
+                    loadingText="Creating account..."
+                >
+                    Create Account
+                </SubmitButton>
+
+                <RegisterFormFooter />
+            </form>
+
+            <RegistrationSuccessModal
+                open={registrationSuccess}
+                phone={registeredPhone}
+                onContinue={handleContinue}
+            />
+        </>
     );
 }

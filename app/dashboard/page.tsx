@@ -27,7 +27,6 @@ export default function DashboardPage(){
 
 
     const copyCode = async()=>{
-
         await navigator.clipboard.writeText(
             user?.referralCode ?? ""
         );
@@ -35,7 +34,6 @@ export default function DashboardPage(){
 
 
     const copyLink = async()=>{
-
         await navigator.clipboard.writeText(
             referralLink
         );
@@ -48,12 +46,6 @@ export default function DashboardPage(){
 
             <main className="pb-10">
                 <Hero />
-
-                <div className="px-4 pt-6 flex flex-col gap-4">
-                    <PositionsBanner />
-
-                    <ActiveCenterBanner />
-                </div>
 
                 <div className="px-4 pt-6">
                     <MenuGrid />

@@ -1,10 +1,13 @@
 "use client";
 
 import {
+    ArrowUpRight,
     Eye,
-    ShieldCheck,
+    EyeOff,
+    LockKeyhole,
     Wallet,
 } from "lucide-react";
+import { useState } from "react";
 
 interface Props {
     availableBalance?: string;
@@ -18,6 +21,7 @@ function money(value?: string) {
             style: "currency",
             currency: "NGN",
             minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
         },
     );
 }
@@ -26,229 +30,357 @@ export default function WalletBalanceCard({
     availableBalance = "0",
     heldBalance = "0",
 }: Props) {
+    const [visible, setVisible] = useState(true);
+
+    const available = money(availableBalance);
+    const held = money(heldBalance);
 
     return (
-
-        <section>
-
+        <section
+            aria-label="Wallet balance"
+            className="w-full"
+        >
             <div
                 className="
                     relative
                     overflow-hidden
-                    rounded-[32px]
-                    bg-gradient-to-br
-                    from-sky-600
-                    via-sky-700
-                    to-indigo-800
-                    p-6
+                    rounded-[28px]
+                    bg-[#076DF3]
+                    px-5
+                    py-5
                     text-white
-                    shadow-xl
+                    shadow-[0_14px_35px_-15px_rgba(7,109,243,0.45)]
+                    sm:px-6
+                    sm:py-6
                 "
             >
-
-                {/* Decorative Circles */}
+                {/* Subtle brand glow */}
 
                 <div
                     className="
+                        pointer-events-none
                         absolute
-                        -right-12
-                        -top-12
-                        h-40
-                        w-40
+                        -right-16
+                        -top-20
+                        h-48
+                        w-48
                         rounded-full
-                        bg-white/10
+                        bg-white/[0.08]
+                        blur-3xl
                     "
                 />
 
                 <div
                     className="
+                        pointer-events-none
                         absolute
-                        -bottom-10
-                        -left-10
-                        h-32
-                        w-32
+                        -bottom-24
+                        -left-20
+                        h-52
+                        w-52
                         rounded-full
-                        bg-white/5
+                        bg-blue-950/[0.10]
+                        blur-3xl
                     "
                 />
 
-                {/* Top */}
+                <div className="relative">
+                    {/* ================================================= */}
+                    {/* HEADER */}
+                    {/* ================================================= */}
 
-                <div className="relative flex items-center justify-between">
-
-                    <div className="flex items-center gap-3">
-
-                        <div
-                            className="
-                                flex
-                                h-12
-                                w-12
-                                items-center
-                                justify-center
-                                rounded-2xl
-                                bg-white/15
-                                backdrop-blur
-                            "
-                        >
-                            <Wallet size={24} />
-                        </div>
-
-                        <div>
-
-                            <p className="text-sm text-sky-100">
-                                Available Balance
-                            </p>
+                    <div className="flex items-center justify-between">
+                        <div className="flex min-w-0 items-center gap-3">
+                            {/* Wallet icon */}
 
                             <div
                                 className="
-                                    mt-1
-                                    inline-flex
+                                    flex
+                                    h-11
+                                    w-11
+                                    shrink-0
                                     items-center
-                                    gap-2
+                                    justify-center
+                                    rounded-2xl
+                                    bg-white/15
+                                    text-white
+                                    ring-1
+                                    ring-white/20
+                                    backdrop-blur-md
                                 "
                             >
-                                <ShieldCheck
-                                    size={15}
-                                    className="text-emerald-300"
-                                />
-                                <span
+                                <Wallet className="h-5 w-5" />
+                            </div>
+
+                            <div className="min-w-0">
+                                <p
                                     className="
-                                        text-xs
-                                        font-medium
-                                        text-sky-100
+                                        text-sm
+                                        font-semibold
+                                        text-white
                                     "
                                 >
-                                    Wallet Active
-                                </span>
+                                    Wallet Balance
+                                </p>
+
+                                <div
+                                    className="
+                                        mt-1
+                                        flex
+                                        items-center
+                                        gap-1.5
+                                    "
+                                >
+                                    <span
+                                        className="
+                                            h-1.5
+                                            w-1.5
+                                            rounded-full
+                                            bg-emerald-300
+                                            shadow-[0_0_0_3px_rgba(110,231,183,0.12)]
+                                        "
+                                    />
+
+                                    <span
+                                        className="
+                                            text-[11px]
+                                            font-medium
+                                            text-blue-100
+                                        "
+                                    >
+                                        Wallet active
+                                    </span>
+                                </div>
                             </div>
                         </div>
+
+                        {/* Balance visibility */}
+
+                        <button
+                            type="button"
+                            onClick={() =>
+                                setVisible(
+                                    (current) =>
+                                        !current,
+                                )
+                            }
+                            aria-label={
+                                visible
+                                    ? "Hide wallet balance"
+                                    : "Show wallet balance"
+                            }
+                            className="
+                                flex
+                                h-10
+                                w-10
+                                shrink-0
+                                items-center
+                                justify-center
+                                rounded-xl
+                                border
+                                border-white/20
+                                bg-white/10
+                                text-white
+                                backdrop-blur-md
+                                transition
+                                hover:bg-white/15
+                                active:scale-95
+                            "
+                        >
+                            {visible ? (
+                                <Eye className="h-[18px] w-[18px]" />
+                            ) : (
+                                <EyeOff className="h-[18px] w-[18px]" />
+                            )}
+                        </button>
                     </div>
 
-                    <button
-                        type="button"
-                        className="
-                            flex
-                            h-11
-                            w-11
-                            items-center
-                            justify-center
-                            rounded-full
-                            bg-white/10
-                            backdrop-blur
-                            transition
-                            active:scale-95
-                        "
-                    >
-                        <Eye size={20} />
-                    </button>
+                    {/* ================================================= */}
+                    {/* MAIN BALANCE */}
+                    {/* ================================================= */}
 
-                </div>
-
-                {/* Balance */}
-                <div className="relative mt-8">
-                    <p
-                        className="
-                            text-3xl
-                            font-bold
-                            tracking-tight
-                        "
-                    >
-                        {money(availableBalance)}
-                    </p>
-                    <p
-                        className="
-                            mt-2 text-[12px]
-                            md:text-sm
-                            text-sky-100
-                        "
-                    >
-                        Funds available for spending and withdrawals
-                    </p>
-                </div>
-
-                {/* Bottom */}
-
-                <div
-                    className="
-                        relative
-                        mt-8
-                        rounded-2xl
-                        border
-                        border-white/10
-                        bg-white/10
-                        p-4
-                        backdrop-blur-sm
-                    "
-                >
-
-                    <div className="flex items-center justify-between">
-
-                        <div>
-
-                            <p
-                                className="
-                                    text-xs
-                                    uppercase
-                                    tracking-wider
-                                    text-sky-100
-                                "
-                            >
-                                Held Balance
-                            </p>
-
-                            <p
-                                className="
-                                    mt-1
-                                    text-[16px]
-                                    font-semibold
-                                "
-                            >
-                                {money(heldBalance)}
-                            </p>
-
-                        </div>
+                    <div className="mt-8">
+                        <p
+                            className="
+                                text-[10px]
+                                font-semibold
+                                uppercase
+                                tracking-[0.14em]
+                                text-blue-100
+                            "
+                        >
+                            Available Balance
+                        </p>
 
                         <div
                             className="
-                                h-10
-                                w-px
-                                bg-white/20
+                                mt-2
+                                flex
+                                min-w-0
+                                items-baseline
                             "
-                        />
-
-                        <div className="text-right">
-
-                            <p
+                        >
+                            <span
                                 className="
-                                    text-xs
-                                    uppercase
-                                    tracking-wider
-                                    text-sky-100
+                                    min-w-0
+                                    truncate
+                                    text-[31px]
+                                    font-bold
+                                    leading-none
+                                    tracking-[-0.04em]
+                                    text-white
+                                    sm:text-[36px]
                                 "
                             >
-                                Currency
-                            </p>
-
-                            <p
-                                className="
-                                    mt-1
-                                    text-[16px]
-                                    font-semibold
-                                "
-                            >
-                                NGN
-                            </p>
-
+                                {visible
+                                    ? available
+                                    : "₦ ••••••"}
+                            </span>
                         </div>
 
+                        <p
+                            className="
+                                mt-2
+                                text-[11px]
+                                leading-5
+                                text-blue-100/90
+                            "
+                        >
+                            Funds available for use
+                            and withdrawals
+                        </p>
                     </div>
 
+                    {/* ================================================= */}
+                    {/* GLASSMORPHISM DETAILS */}
+                    {/* ================================================= */}
+
+                    <div
+                        className="
+                            mt-7
+                            overflow-hidden
+                            rounded-[20px]
+                            border
+                            border-white/25
+                            bg-white/[0.14]
+                            shadow-[inset_0_1px_0_rgba(255,255,255,0.18)]
+                            backdrop-blur-xl
+                        "
+                    >
+                        <div
+                            className="
+                                grid
+                                grid-cols-2
+                                divide-x
+                                divide-white/20
+                            "
+                        >
+                            {/* Held balance */}
+
+                            <div
+                                className="
+                                    min-w-0
+                                    px-4
+                                    py-4
+                                    sm:px-5
+                                "
+                            >
+                                <div
+                                    className="
+                                        flex
+                                        items-center
+                                        gap-1.5
+                                    "
+                                >
+                                    <LockKeyhole
+                                        className="
+                                            h-3.5
+                                            w-3.5
+                                            text-blue-100
+                                        "
+                                    />
+
+                                    <p
+                                        className="
+                                            text-[10px]
+                                            font-semibold
+                                            uppercase
+                                            tracking-[0.1em]
+                                            text-blue-100
+                                        "
+                                    >
+                                        Held Balance
+                                    </p>
+                                </div>
+
+                                <p
+                                    className="
+                                        mt-2
+                                        truncate
+                                        text-sm
+                                        font-semibold
+                                        text-white
+                                    "
+                                >
+                                    {visible
+                                        ? held
+                                        : "₦ ••••••"}
+                                </p>
+                            </div>
+
+                            {/* Currency */}
+
+                            <div
+                                className="
+                                    min-w-0
+                                    px-4
+                                    py-4
+                                    sm:px-5
+                                "
+                            >
+                                <p
+                                    className="
+                                        text-[10px]
+                                        font-semibold
+                                        uppercase
+                                        tracking-[0.1em]
+                                        text-blue-100
+                                    "
+                                >
+                                    Currency
+                                </p>
+
+                                <div
+                                    className="
+                                        mt-2
+                                        flex
+                                        items-center
+                                        gap-1.5
+                                    "
+                                >
+                                    <span
+                                        className="
+                                            text-sm
+                                            font-semibold
+                                            text-white
+                                        "
+                                    >
+                                        NGN
+                                    </span>
+
+                                    <ArrowUpRight
+                                        className="
+                                            h-3.5
+                                            w-3.5
+                                            text-blue-100
+                                        "
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
             </div>
-
         </section>
-
     );
-
 }

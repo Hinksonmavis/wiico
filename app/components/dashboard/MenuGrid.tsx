@@ -26,45 +26,20 @@ const MENU_ITEMS: MenuItem[] = [
     },
     {
         icon: MemberBenefitsIcon,
-        line1: "Member",
+        line1: "Partner",
         line2: "benefits",
         href: ROUTES.MEMBERS,
     },
     {
         icon: TeamExpansionIcon,
-        line1: "Team",
-        line2: "expansion",
-        href: "/team-expansion",
+        line1: "Referrals",
+        href: "/referrals",
     },
-    // {
-    //     icon: ManagementPositionsIcon,
-    //     line1: "Management",
-    //     line2: "Positions",
-    //     href: "/management-positions",
-    // // },
-    // {
-    //     icon: FinancialProductsIcon,
-    //     line1: "Financial",
-    //     line2: "products",
-    //     href: "/financial-products",
-    // },
-    // {
-    //     icon: CompanyActivityIcon,
-    //     line1: "Company",
-    //     line2: "Activity",
-    //     href: "/company-activity",
-    // },
-    // {
-    //     icon: LuckyCardsIcon,
-    //     line1: "Lucky",
-    //     line2: "Cards",
-    //     href: "/lucky-cards",
-    // },
     {
         icon: MembershipWelfareIcon,
-        line1: "Membership",
+        line1: "Partner",
         line2: "Welfare",
-        href: "/membership-welfare",
+        href: "/partner-welfare",
     },
 ];
 

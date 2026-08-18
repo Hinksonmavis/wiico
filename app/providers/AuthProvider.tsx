@@ -10,7 +10,6 @@ export default function AuthProvider({
 }: {
     children: React.ReactNode;
 }) {
-
     const {
         accessToken,
         user,
@@ -22,99 +21,85 @@ export default function AuthProvider({
         useState(true);
 
     useEffect(() => {
-
         let mounted = true;
 
         async function initialize() {
-
             /**
              * No authenticated session.
              */
             if (!accessToken) {
-
                 if (mounted) {
                     setLoading(false);
                 }
 
                 return;
-
             }
 
             /**
              * User already loaded.
              */
             if (user) {
-
                 if (mounted) {
                     setLoading(false);
                 }
 
                 return;
-
             }
 
             try {
-
-                /**
-                 * If the access token has expired,
-                 * the Axios interceptor will refresh
-                 * it automatically before retrying
-                 * this request.
-                 */
                 const response =
                     await axiosInstance.get(
                         "/auth/me",
                     );
 
-                if (mounted) {
-
-                    setUser(
-                        response.data.data,
-                    );
-
+                if (!mounted) {
+                    return;
                 }
 
-            } catch {
+                setUser(
+                    response.data.data,
+                );
+            } catch (error) {
+                console.error(
+                    "AuthProvider: failed to load current user:",
+                    error,
+                );
 
+                /**
+                 * IMPORTANT:
+                 *
+                 * Do not immediately logout here.
+                 *
+                 * We need to know whether the problem
+                 * is authentication, API availability,
+                 * token refresh, etc.
+                 */
                 if (mounted) {
-
-                    logout();
-
-                }
-
-            } finally {
-
-                if (mounted) {
-
                     setLoading(false);
-
                 }
 
+                return;
             }
 
+            if (mounted) {
+                setLoading(false);
+            }
         }
 
         initialize();
 
         return () => {
-
             mounted = false;
-
         };
-
     }, [
         accessToken,
         user,
         setUser,
-        logout,
     ]);
 
     if (loading) {
-
         return null;
-
     }
 
     return children;
-
 }

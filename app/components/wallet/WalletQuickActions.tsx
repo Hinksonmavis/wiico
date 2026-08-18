@@ -6,16 +6,18 @@ import {
     ArrowUpRight,
     ReceiptText,
     Clock3,
+    ChevronRight,
+    type LucideIcon,
 } from "lucide-react";
 
 interface Action {
     title: string;
     description: string;
-    icon: React.ElementType;
+    icon: LucideIcon;
     href: string;
-    bg: string;
     iconBg: string;
     iconColor: string;
+    accent: string;
 }
 
 export default function WalletQuickActions() {
@@ -24,57 +26,80 @@ export default function WalletQuickActions() {
     const actions: Action[] = [
         {
             title: "Deposit",
-            description: "Fund your wallet",
+            description: "Add money to wallet",
             icon: ArrowDownLeft,
             href: "/dashboard/wallet/deposit",
-            bg: "bg-sky-50",
-            iconBg: "bg-sky-100",
+            iconBg: "bg-sky-50",
             iconColor: "text-sky-600",
+            accent: "bg-sky-500",
         },
         {
             title: "Withdraw",
-            description: "Transfer your funds",
+            description: "Move money out",
             icon: ArrowUpRight,
             href: "/dashboard/wallet/withdrawal",
-            bg: "bg-emerald-50",
-            iconBg: "bg-emerald-100",
+            iconBg: "bg-emerald-50",
             iconColor: "text-emerald-600",
+            accent: "bg-emerald-500",
         },
         {
             title: "Transactions",
-            description: "View wallet history",
+            description: "View wallet activity",
             icon: ReceiptText,
             href: "/dashboard/transactions",
-            bg: "bg-violet-50",
-            iconBg: "bg-violet-100",
+            iconBg: "bg-violet-50",
             iconColor: "text-violet-600",
+            accent: "bg-violet-500",
         },
         {
             title: "Pending",
-            description: "Processing requests",
+            description: "Track pending requests",
             icon: Clock3,
             href: "/dashboard/wallet/withdrawals",
-            bg: "bg-amber-50",
-            iconBg: "bg-amber-100",
+            iconBg: "bg-amber-50",
             iconColor: "text-amber-600",
+            accent: "bg-amber-500",
         },
     ];
 
     return (
         <section className="space-y-4">
+            {/* Section heading */}
 
-            <div>
-                <h2 className="text-lg font-semibold text-slate-900">
+            <div className="px-1">
+                <h2
+                    className="
+                        text-[17px]
+                        font-bold
+                        tracking-tight
+                        text-slate-900
+                    "
+                >
                     Quick Actions
                 </h2>
 
-                <p className="mt-1 text-sm text-slate-500">
-                    Manage your wallet faster.
+                <p
+                    className="
+                        mt-1
+                        text-[13px]
+                        font-medium
+                        text-slate-400
+                    "
+                >
+                    Manage your wallet in seconds.
                 </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            {/* Actions */}
 
+            <div
+                className="
+                    grid
+                    grid-cols-2
+                    gap-3
+                    sm:gap-4
+                "
+            >
                 {actions.map((action) => {
                     const Icon = action.icon;
 
@@ -83,51 +108,132 @@ export default function WalletQuickActions() {
                             key={action.title}
                             type="button"
                             onClick={() => router.push(action.href)}
-                            className={`
-                                ${action.bg}
-                                flex
-                                flex-col
-                                items-start
-                                rounded-3xl
+                            className="
+                                group
+                                relative
+                                min-w-0
+                                overflow-hidden
+                                rounded-[22px]
                                 border
-                                border-slate-200
-                                p-5
+                                border-slate-200/80
+                                bg-white
+                                p-4
                                 text-left
+                                shadow-[0_4px_18px_rgba(15,23,42,0.035)]
                                 transition-all
                                 duration-200
-                                active:scale-[0.97]
-                            `}
+                                hover:-translate-y-0.5
+                                hover:border-slate-300
+                                hover:shadow-[0_8px_24px_rgba(15,23,42,0.06)]
+                                active:scale-[0.975]
+                                sm:rounded-[24px]
+                                sm:p-5
+                            "
                         >
+                            {/* Accent */}
+
                             <div
                                 className={`
-                                    ${action.iconBg}
-                                    flex
-                                    h-14
-                                    w-14
-                                    items-center
-                                    justify-center
-                                    rounded-2xl
+                                    absolute
+                                    left-0
+                                    top-0
+                                    h-1
+                                    w-9
+                                    rounded-br-full
+                                    ${action.accent}
                                 `}
+                            />
+
+                            {/* Top row */}
+
+                            <div
+                                className="
+                                    flex
+                                    items-start
+                                    justify-between
+                                    gap-2
+                                "
                             >
-                                <Icon
-                                    size={24}
-                                    className={action.iconColor}
-                                />
+                                <div
+                                    className={`
+                                        flex
+                                        h-10
+                                        w-10
+                                        shrink-0
+                                        items-center
+                                        justify-center
+                                        rounded-xl
+                                        ${action.iconBg}
+                                        sm:h-11
+                                        sm:w-11
+                                        sm:rounded-[14px]
+                                    `}
+                                >
+                                    <Icon
+                                        size={19}
+                                        strokeWidth={2.2}
+                                        className={action.iconColor}
+                                    />
+                                </div>
+
+                                <div
+                                    className="
+                                        flex
+                                        h-7
+                                        w-7
+                                        shrink-0
+                                        items-center
+                                        justify-center
+                                        rounded-full
+                                        bg-slate-50
+                                        text-slate-300
+                                        transition-all
+                                        duration-200
+                                        group-hover:bg-slate-100
+                                        group-hover:text-slate-600
+                                    "
+                                >
+                                    <ChevronRight
+                                        size={15}
+                                        strokeWidth={2.2}
+                                    />
+                                </div>
                             </div>
 
-                            <h3 className="mt-5 text-base font-semibold text-slate-900">
-                                {action.title}
-                            </h3>
+                            {/* Content */}
 
-                            <p className="mt-1 text-sm leading-5 text-slate-500">
-                                {action.description}
-                            </p>
+                            <div className="mt-4 min-w-0 sm:mt-5">
+                                <h3
+                                    className="
+                                        truncate
+                                        text-[14px]
+                                        font-bold
+                                        tracking-tight
+                                        text-slate-900
+                                        sm:text-[15px]
+                                    "
+                                >
+                                    {action.title}
+                                </h3>
+
+                                <p
+                                    className="
+                                        mt-1
+                                        truncate
+                                        text-[11px]
+                                        font-medium
+                                        leading-4
+                                        text-slate-400
+                                        sm:text-xs
+                                    "
+                                >
+                                    {action.description}
+                                </p>
+                            </div>
                         </button>
                     );
                 })}
-
             </div>
-
         </section>
     );
 }

@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
     Home,
-    Package2,
     ShoppingBag,
     Users,
     User,
@@ -20,8 +19,8 @@ const tabs = [
         icon: Home,
     },
     {
-        label: "Message",
-        href: ROUTES.PRODUCTS,
+        label: "Chat",
+        href: ROUTES.CHAT,
         icon: MessageCircle,
     },
     {
@@ -43,151 +42,225 @@ const tabs = [
 ];
 
 export default function AppFooter() {
-
     const pathname = usePathname();
 
     return (
-
         <footer
             className="
-                sticky
+                fixed
+                inset-x-0
                 bottom-0
                 z-50
-                bg-white
+                px-3
+                pb-[max(8px,env(safe-area-inset-bottom))]
+                pointer-events-none
             "
         >
-
             <nav
                 className="
                     relative
-                    flex
-                    h-20
-                    items-center
-                    justify-between
+                    mx-auto
+                    w-full
+                    max-w-md
+                    pointer-events-auto
+                    rounded-[28px]
                     border
-                    border-white/60
-                    px-3
-                    shadow-[0_15px_45px_rgba(15,23,42,.12)]
+                    border-slate-200/80
+                    bg-white/95
+                    px-2
+                    shadow-[0_12px_45px_rgba(15,23,42,0.14)]
+                    backdrop-blur-xl
                 "
             >
+                <div
+                    className="
+                        relative
+                        flex
+                        h-[70px]
+                        items-center
+                    "
+                >
+                    {tabs.map((tab) => {
+                        const active =
+                            tab.href === ROUTES.HOME
+                                ? pathname === ROUTES.HOME
+                                : pathname.startsWith(tab.href);
 
-                {tabs.map((tab) => {
+                        const Icon = tab.icon;
 
-                    const active =
-                        tab.href === ROUTES.HOME
-                            ? pathname === ROUTES.HOME
-                            : pathname.startsWith(tab.href);
+                        // Center Orders action
+                        if (tab.center) {
+                            return (
+                                <Link
+                                    key={tab.href}
+                                    href={tab.href}
+                                    aria-label={tab.label}
+                                    className="
+                                        relative
+                                        flex
+                                        h-full
+                                        flex-1
+                                        flex-col
+                                        items-center
+                                        justify-end
+                                        pb-2
+                                    "
+                                >
+                                    <div
+                                        className={`
+                                            absolute
+                                            -top-8
+                                            flex
+                                            h-[62px]
+                                            w-[62px]
+                                            items-center
+                                            justify-center
+                                            rounded-full
+                                            border-[5px]
+                                            border-white
+                                            bg-[#4DA8FE]
+                                            shadow-[0_10px_28px_rgba(77,168,254,0.35)]
+                                            transition-all
+                                            duration-200
+                                            ease-out
+                                            active:scale-95
+                                            ${
+                                                active
+                                                    ? "scale-105 shadow-[0_12px_32px_rgba(77,168,254,0.5)]"
+                                                    : ""
+                                            }
+                                        `}
+                                    >
+                                        <Icon
+                                            size={25}
+                                            strokeWidth={2.2}
+                                            className="
+                                                text-white
+                                            "
+                                        />
+                                    </div>
 
-                    const Icon = tab.icon;
-
-                    if (tab.center) {
+                                    <span
+                                        className={`
+                                            mt-1
+                                            text-[10px]
+                                            font-semibold
+                                            tracking-tight
+                                            transition-colors
+                                            ${
+                                                active
+                                                    ? "text-[#4DA8FE]"
+                                                    : "text-slate-500"
+                                            }
+                                        `}
+                                    >
+                                        {tab.label}
+                                    </span>
+                                </Link>
+                            );
+                        }
 
                         return (
-
                             <Link
                                 key={tab.href}
                                 href={tab.href}
+                                aria-current={
+                                    active
+                                        ? "page"
+                                        : undefined
+                                }
                                 className="
-                                    -mt-12
+                                    relative
                                     flex
+                                    h-full
                                     flex-1
                                     flex-col
                                     items-center
+                                    justify-center
+                                    gap-1
+                                    rounded-2xl
+                                    transition-transform
+                                    duration-200
+                                    active:scale-95
                                 "
                             >
+                                {/* Active indicator */}
+                                <span
+                                    className={`
+                                        absolute
+                                        top-1
+                                        h-1
+                                        w-5
+                                        rounded-full
+                                        bg-[#4DA8FE]
+                                        transition-all
+                                        duration-200
+                                        ${
+                                            active
+                                                ? "scale-100 opacity-100"
+                                                : "scale-50 opacity-0"
+                                        }
+                                    `}
+                                />
 
+                                {/* Icon container */}
                                 <div
-    className={`
-        flex
-        h-16
-        w-16
-        items-center
-        justify-center
-        rounded-full
-        bg-[#4DA8FE]
-        ring-8
-        transition-all
-        duration-300
-        hover:scale-105
-        ${
-            active
-                ? "scale-110 ring-white shadow-[0_18px_40px_rgba(77,168,254,.55)]"
-                : "ring-white/70 shadow-[0_15px_30px_rgba(77,168,254,.35)]"
-        }
-    `}
->
-    <Icon
-        size={28}
-        className={`
-            text-white
-            transition-transform
-            duration-300
-            ${active ? "scale-110" : ""}
-        `}
-    />
-</div>
+                                    className={`
+                                        flex
+                                        h-9
+                                        w-10
+                                        items-center
+                                        justify-center
+                                        rounded-xl
+                                        transition-all
+                                        duration-200
+                                        ${
+                                            active
+                                                ? "bg-[#4DA8FE]/10"
+                                                : "bg-transparent"
+                                        }
+                                    `}
+                                >
+                                    <Icon
+                                        size={21}
+                                        strokeWidth={
+                                            active
+                                                ? 2.4
+                                                : 2
+                                        }
+                                        className={`
+                                            transition-colors
+                                            duration-200
+                                            ${
+                                                active
+                                                    ? "text-[#4DA8FE]"
+                                                    : "text-slate-400"
+                                            }
+                                        `}
+                                    />
+                                </div>
 
                                 <span
-                                    className="
-                                        mt-2
-                                        text-xs
+                                    className={`
+                                        text-[10px]
                                         font-semibold
-                                        text-[#1F2937]
-                                    "
+                                        tracking-tight
+                                        transition-colors
+                                        duration-200
+                                        ${
+                                            active
+                                                ? "text-[#4DA8FE]"
+                                                : "text-slate-500"
+                                        }
+                                    `}
                                 >
                                     {tab.label}
                                 </span>
-
                             </Link>
-
                         );
-
-                    }
-
-                    return (
-
-                        <Link
-                            key={tab.href}
-                            href={tab.href}
-                            className="
-                                flex
-                                flex-1
-                                flex-col
-                                items-center
-                                gap-2
-                            "
-                        >
-
-                            <Icon
-                                size={22}
-                                strokeWidth={2}
-                                className={
-                                    active
-                                        ? "text-[#4DA8FE]"
-                                        : "text-[#6B7280]"
-                                }
-                            />
-
-                            <span
-                                className={`text-[11px] font-medium ${
-                                    active
-                                        ? "text-[#4DA8FE]"
-                                        : "text-[#374151]"
-                                }`}
-                            >
-                                {tab.label}
-                            </span>
-
-                        </Link>
-
-                    );
-
-                })}
-
+                    })}
+                </div>
             </nav>
-
         </footer>
-
     );
-
 }

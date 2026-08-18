@@ -1,11 +1,4 @@
-import {
-    AdminLoginRequest,
-    AuthResponse,
-    LoginRequest,
-    RefreshResponse,
-    RegisterRequest,
-    User,
-} from "../../types/clientTypes/auth";
+import { AdminLoginRequest, AuthResponse, LoginRequest, LoginResponse, RefreshResponse, RegisterRequest, User } from "../../types/clientTypes/auth";
 import Cookies from "js-cookie";
 
 import { api } from "../api";
@@ -42,10 +35,7 @@ class AuthService {
     }
 
     logout(refreshToken: string) {
-        return api.post<{
-            success: boolean;
-            message: string;
-        }>("/auth/logout", {
+        return api.post<LoginResponse>("/auth/logout", {
             refreshToken,
         });
     }
@@ -55,6 +45,16 @@ class AuthService {
             success: boolean;
             data: User;
         }>("/auth/me");
+    }
+
+    updateMe(data: {
+        email?: string | null;
+    }) {
+        return api.patch<{
+            success: boolean;
+            message: string;
+            data: User;
+        }>("/auth/me", data);
     }
 
     // Remove all local authentication.
@@ -72,5 +72,4 @@ class AuthService {
     }
 }
 
-export const authService =
-    new AuthService();
+export const authService = new AuthService();

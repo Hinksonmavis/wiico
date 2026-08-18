@@ -13,7 +13,6 @@ if (!API_URL) {
 export async function apiGet(
     endpoint:string
 ) {
-
     const response =
         await fetch(
             `${API_URL}${endpoint}`,
@@ -26,10 +25,7 @@ export async function apiGet(
             }
         );
 
-
-    const data =
-        await response.json();
-
+    const data = await response.json();
 
     if(!response.ok){
         throw new Error(
@@ -37,7 +33,6 @@ export async function apiGet(
             "API request failed"
         );
     }
-
 
     return data;
 }

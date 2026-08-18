@@ -47,7 +47,7 @@ export default function AboutCompany() {
                 </div>
 
                 <Link
-                    href={ROUTES.ABOUT ?? "/about"}
+                    href={ROUTES.ABOUT}
                     className="
                         flex
                         items-center

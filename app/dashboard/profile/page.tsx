@@ -2,21 +2,20 @@
 
 import { useEffect, useState } from "react";
 
-import MembershipBanner from "@/app/components/profile/MembershipBanner";
 import ProfileHeader from "@/app/components/profile/ProfileHeader";
-import ProfileMenuGrid from "@/app/components/profile/ProfileMenuGrid";
 import ProfileStatsCard from "@/app/components/profile/ProfileStatsCard";
-import ReferralCard from "@/app/components/profile/ReferralCard";
 import SettingsList from "@/app/components/profile/SettingsList";
 import UpgradeBanner from "@/app/components/profile/UpgradeBanner";
+
 import UserGuard from "@/app/guards/UserGuard";
+
 import { useCurrentUser } from "@/app/hooks/clientHooks/userHooks/useCurrentUser";
-import { getReferralLink } from "@/app/utils/referral";
 
 export default function Profile() {
     const { data: user } = useCurrentUser();
 
-    const [mounted, setMounted] = useState(false);
+    const [mounted, setMounted] =
+        useState(false);
 
     useEffect(() => {
         setMounted(true);
@@ -26,61 +25,124 @@ export default function Profile() {
         return null;
     }
 
-    const referralLink = user ? getReferralLink(user.referralCode) : "";
-
     return (
         <UserGuard>
-            <main className="flex min-h-full flex-col bg-slate-50 pb-10">
-                {/* Hero */}
-                <div className="relative overflow-hidden">
-                    {/* Header Background */}
-                    <div
-                        className="
-                            relative
-                            bg-gradient-to-b
-                            from-[#7CC0FF]
-                            via-[#4DA8FE]
-                            to-[#4DA8FE]
-                        "
-                    >
-                        <ProfileHeader
-                            phone={user?.phone ?? ""}
-                            country={user?.country ?? ""}
-                        />
-                    </div>
+            <main
+                className="
+                    min-h-screen
+                    overflow-x-hidden
+                    bg-slate-50
+                    pb-10
 
-                    {/* Bottom Fade */}
+                    sm:pb-12
+                "
+            >
+                {/* =========================================
+                    PROFILE HERO
+                ========================================== */}
+                <section
+                    className="
+                        relative
+                        overflow-hidden
+                        bg-gradient-to-b
+                        from-[#7CC0FF]
+                        via-[#4DA8FE]
+                        to-[#4DA8FE]
+                    "
+                >
+                    {/* Ambient light */}
                     <div
                         className="
                             pointer-events-none
                             absolute
+                            -right-20
+                            -top-20
+                            h-48
+                            w-48
+                            rounded-full
+                            bg-white/15
+                            blur-3xl
+
+                            sm:h-60
+                            sm:w-60
+                        "
+                    />
+
+                    <div
+                        className="
+                            pointer-events-none
+                            absolute
+                            -bottom-24
+                            -left-20
+                            h-48
+                            w-48
+                            rounded-full
+                            bg-white/10
+                            blur-3xl
+                        "
+                    />
+
+                    <div className="relative">
+                        <ProfileHeader
+                            phone={
+                                user?.phone ?? ""
+                            }
+                            country={
+                                user?.country ??
+                                ""
+                            }
+                        />
+                    </div>
+
+                    {/* Hero bottom transition */}
+                    <div
+                        className="
+                            pointer-events-none
+                            absolute
+                            inset-x-0
                             bottom-0
-                            left-0
-                            right-0
-                            h-16
+                            h-10
                             bg-gradient-to-b
                             from-transparent
-                            via-slate-50/60
                             to-slate-50
                         "
                     />
-                </div>
+                </section>
 
-                <div className="-mt-6 flex flex-col gap-8">
-                    <UpgradeBanner />
-                    <ProfileStatsCard />
-                    <MembershipBanner />
+                {/* =========================================
+                    PROFILE CONTENT
+                ========================================== */}
+                <section
+                    className="
+                        relative
+                        z-10
+                        -mt-5
 
-                    {/* {user && (
-                        <ReferralCard
-                            referralCode={user.referralCode}
-                            referralLink={referralLink}
-                        />
-                    )} */}
+                        sm:-mt-6
+                    "
+                >
+                    <div
+                        className="
+                            flex
+                            flex-col
+                            gap-4
+                            sm:gap-5
+                            md:gap-6
+                        "
+                    >
+                        {/* Upgrade */}
+                        <UpgradeBanner />
 
-                    {/* <ProfileMenuGrid /> */}
-                    <SettingsList />
-                </div>
+                        <div className="mt-4 flex flex-col gap-3">
+
+                            {/* Wallet */}
+                            <ProfileStatsCard />
+
+                            {/* Settings */}
+                            <SettingsList />
+                        </div>
+                    </div>
+                </section>
             </main>
         </UserGuard>
     );

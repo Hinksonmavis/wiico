@@ -5,6 +5,7 @@ import { Toaster } from "sonner";
 import "./globals.css";
 import QueryProvider from "./providers/query-provider";
 import AuthProvider from "./providers/AuthProvider";
+import SecurityProtection from "./layout/SecurityProtection";
 
 const poppins = Poppins({
     subsets: ["latin"],
@@ -45,6 +46,7 @@ export default function RootLayout({
                 `}
                 // className={`font-serif antialiased bg-slate-100 overflow-hidden`}
             >
+                {/* <SecurityProtection /> */}
                 {/* =====================================================
                     Desktop Stage
                     - Centers the mobile app shell.

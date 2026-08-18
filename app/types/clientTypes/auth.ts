@@ -1,11 +1,28 @@
 export interface Membership {
     id: string;
     name: string;
-    workDeposit: string;
-    dailyRevenue: string;
-    monthlyRevenue: string;
-    totalProfit: string;
+    slug: string;
+
     isActive: boolean;
+    isInternship: boolean;
+    canUpgradeTo: boolean;
+
+    sortOrder: number;
+    description: string | null;
+
+    upgradePrice: string;
+
+    invitationCommissionLevel1: string;
+    invitationCommissionLevel2: string;
+    invitationCommissionLevel3: string;
+
+    orderCommissionLevel1: string;
+    orderCommissionLevel2: string;
+    orderCommissionLevel3: string;
+
+    tasksPerDay: number | null;
+    rewardPerTask: string | null;
+    dailyRewardLimit: string | null;
 }
 
 export interface User {
@@ -49,6 +66,11 @@ export interface AuthResponse {
         accessToken: string;
         refreshToken: string;
     };
+}
+
+export interface LoginResponse {
+    success: boolean;
+    message: string;
 }
 
 export interface RefreshResponse {

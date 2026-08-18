@@ -1,12 +1,17 @@
 import Link from "next/link";
-import { ChevronRight, ShieldEllipsis } from "lucide-react";
+import {
+    ChevronRight,
+    ShieldEllipsis,
+} from "lucide-react";
+
+import { ROUTES } from "@/app/constants/routes";
 
 interface UpgradeBannerProps {
     href?: string;
 }
 
 export default function UpgradeBanner({
-    href = "/dashboard/membership",
+    href = ROUTES.MEMBERS,
 }: UpgradeBannerProps) {
     return (
         <Link
@@ -15,28 +20,36 @@ export default function UpgradeBanner({
                 group
                 relative
                 z-20
-                mx-4
+                mx-3
                 flex
                 items-center
                 justify-between
+                gap-3
                 overflow-hidden
-                rounded-[24px]
+                rounded-[18px]
                 border
-                border-white/60
+                border-white/70
                 bg-gradient-to-r
                 from-slate-100
-                via-slate-100/90
+                via-slate-100/95
                 to-slate-200
-                px-5
-                py-4
-                backdrop-blur-xl
+                px-3.5
+                py-3
                 ring-1
                 ring-black/5
-                shadow-[0_10px_30px_rgba(15,23,42,0.08)]
+                shadow-[0_6px_20px_rgba(15,23,42,0.06)]
                 transition-all
                 duration-300
                 hover:-translate-y-0.5
-                hover:shadow-[0_18px_40px_rgba(15,23,42,0.12)]
+                hover:shadow-[0_12px_28px_rgba(15,23,42,0.1)]
+                sm:mx-4
+                sm:gap-4
+                sm:rounded-[20px]
+                sm:px-4
+                sm:py-3.5
+                md:px-5
+                md:py-4
+                lg:rounded-[22px]
             "
         >
             {/* Glass Highlight */}
@@ -46,8 +59,8 @@ export default function UpgradeBanner({
                     absolute
                     inset-0
                     bg-gradient-to-br
-                    from-white/65
-                    via-white/15
+                    from-white/60
+                    via-white/10
                     to-transparent
                 "
             />
@@ -57,47 +70,104 @@ export default function UpgradeBanner({
                 className="
                     pointer-events-none
                     absolute
-                    -right-8
-                    -top-8
-                    h-28
-                    w-28
+                    -right-10
+                    -top-10
+                    h-24
+                    w-24
                     rounded-full
-                    bg-white/35
+                    bg-white/40
                     blur-3xl
+                    sm:h-28
+                    sm:w-28
                 "
             />
 
             {/* Left Content */}
-            <div className="relative flex items-center gap-4">
+            <div
+                className="
+                    relative
+                    flex
+                    min-w-0
+                    items-center
+                    gap-2.5
+                    sm:gap-3
+                    md:gap-4
+                "
+            >
+                {/* Icon */}
                 <div
                     className="
                         flex
-                        h-14
-                        w-14
+                        h-10
+                        w-10
+                        shrink-0
                         items-center
                         justify-center
-                        rounded-2xl
+                        rounded-xl
                         border
-                        border-white/60
-                        bg-white/40
+                        border-white/70
+                        bg-white/50
                         shadow-inner
                         backdrop-blur-md
+                        sm:h-11
+                        sm:w-11
+                        sm:rounded-[14px]
+                        md:h-12
+                        md:w-12
+                        lg:h-14
+                        lg:w-14
+                        lg:rounded-2xl
                     "
                 >
                     <ShieldEllipsis
-                        size={28}
+                        className="
+                            h-[20px]
+                            w-[20px]
+                            text-slate-600
+                            sm:h-[21px]
+                            sm:w-[21px]
+                            md:h-[23px]
+                            md:w-[23px]
+                            lg:h-7
+                            lg:w-7
+                        "
                         strokeWidth={1.7}
-                        className="text-slate-600"
                     />
                 </div>
 
-                <div>
-                    <h3 className="text-[17px] font-semibold tracking-tight text-slate-900">
-                        Upgrade Position
+                {/* Text */}
+                <div className="min-w-0">
+                    <h3
+                        className="
+                            truncate
+                            text-[14px]
+                            font-semibold
+                            tracking-tight
+                            text-slate-900
+                            sm:text-[15px]
+                            md:text-[16px]
+                            lg:text-[17px]
+                        "
+                    >
+                        Upgrade Membership
                     </h3>
 
-                    <p className="mt-1 text-[13px] leading-5 text-slate-500">
-                        Upgrade to unlock more platform privileges.
+                    <p
+                        className="
+                            mt-0.5
+                            max-w-[210px]
+                            truncate
+                            text-[11px]
+                            leading-4
+                            text-slate-500
+                            sm:max-w-[280px]
+                            sm:text-[12px]
+                            sm:leading-5
+                            md:max-w-none
+                            md:text-[13px]
+                        "
+                    >
+                        Unlock more platform benefits.
                     </p>
                 </div>
             </div>
@@ -107,24 +177,36 @@ export default function UpgradeBanner({
                 className="
                     relative
                     flex
-                    h-11
-                    w-11
+                    h-9
+                    w-9
+                    shrink-0
                     items-center
                     justify-center
                     rounded-full
                     border
-                    border-white/60
-                    bg-white/40
+                    border-white/70
+                    bg-white/50
                     backdrop-blur-md
                     transition-all
                     duration-300
-                    group-hover:translate-x-1
-                    group-hover:bg-white/60
+                    group-hover:translate-x-0.5
+                    group-hover:bg-white/70
+                    sm:h-10
+                    sm:w-10
+                    md:h-11
+                    md:w-11
                 "
             >
                 <ChevronRight
-                    size={20}
-                    className="text-slate-500"
+                    className="
+                        h-[17px]
+                        w-[17px]
+                        text-slate-500
+                        sm:h-[18px]
+                        sm:w-[18px]
+                        md:h-5
+                        md:w-5
+                    "
                 />
             </div>
 
@@ -133,13 +215,14 @@ export default function UpgradeBanner({
                 className="
                     pointer-events-none
                     absolute
-                    inset-x-5
+                    inset-x-4
                     bottom-0
                     h-px
                     bg-gradient-to-r
                     from-transparent
                     via-white/80
                     to-transparent
+                    sm:inset-x-5
                 "
             />
         </Link>

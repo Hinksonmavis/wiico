@@ -21,3 +21,28 @@ body {
 .no-scrollbar::-webkit-scrollbar {
     display: none;
 }
+
+@keyframes notify-marquee {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-33.333%);
+    }
+}
+
+.notify-marquee {
+    animation: notify-marquee 18s linear infinite;
+    will-change: transform;
+}
+
+.notify-marquee:hover {
+    animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .notify-marquee {
+        animation: none;
+    }
+}

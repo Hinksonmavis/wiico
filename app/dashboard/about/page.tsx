@@ -1,298 +1,587 @@
-import Link from "next/link";
+"use client";
+
 import {
+    ArrowUpRight,
     ChevronLeft,
-    Building2,
-    Globe,
-    TrendingUp,
-    Users,
+    ShieldCheck,
     Sparkles,
 } from "lucide-react";
 
-import { ROUTES } from "@/app/constants/routes";
+import { sections } from "@/app/constants/about";
+import HeroStat from "@/app/components/about/HeroStat";
+import AboutHeader from "@/app/components/about/AboutHeader";
 
-const sections = [
-    {
-        icon: Building2,
-        title: "Who We Are",
-        content:
-            "WIICO was founded in 2025 and is headquartered in Melbourne, Australia. We specialize in precision online marketing services for global e-commerce platforms. Through partnerships with leading marketplaces such as Amazon, eBay and Walmart, we provide customized marketing solutions that increase traffic, improve conversion rates and drive sustainable business growth. Since our establishment, we have helped brands including Labubu and Aje strengthen their visibility and become leaders within their industries.",
-    },
-    {
-        icon: Globe,
-        title: "The Market Opportunity",
-        content:
-            "The rapid growth of the internet and Artificial Intelligence (AI) has transformed global commerce. Traditional offline marketing is becoming increasingly expensive while delivering results that are difficult to measure. As consumer behavior shifts online, businesses require smarter, data-driven marketing solutions to remain competitive.",
-    },
-    {
-        icon: TrendingUp,
-        title: "Our Solution",
-        content:
-            "WIICO provides a one-stop digital marketing platform designed to accelerate order growth for online merchants. Through entrusted marketing campaigns, businesses can reduce customer acquisition costs, expand globally, improve product visibility and achieve long-term, sustainable sales growth.",
-    },
-    {
-        icon: Users,
-        title: "How Members Earn",
-        content:
-            "WIICO members contribute by completing promotional product orders for merchants. Every completed task helps merchants increase sales performance while generating service revenue for the platform. Sixty percent of the platform's service income is distributed to participating members as rewards, creating a win-win ecosystem for merchants and users alike.",
-    },
-];
 
 export default function AboutCompany() {
     return (
-        <main className="min-h-full bg-slate-50">
+        <main className="min-h-screen overflow-x-hidden bg-[#f7f9fc]">
+            
+            {/* HEADER */}
+            <AboutHeader />
 
-            {/* ===========================
-                Header
-            ============================ */}
-            <header
+            {/* =====================================================
+                CONTENT
+            ====================================================== */}
+            <div
                 className="
-                    sticky
-                    top-0
-                    z-20
-                    border-b
-                    border-slate-200
-                    bg-white/80
-                    backdrop-blur-xl
+                    mx-auto
+                    max-w-3xl
+                    px-4
+                    pb-12
+                    pt-5
+
+                    sm:px-5
+                    sm:pb-16
+                    sm:pt-7
+
+                    lg:px-6
                 "
             >
-                <div className="flex h-16 items-center px-5">
-
-                    <Link
-                        href={ROUTES.DASHBOARD}
-                        className="
-                            flex
-                            h-10
-                            w-10
-                            items-center
-                            justify-center
-                            rounded-full
-                            bg-slate-100
-                            transition
-                            hover:bg-[#4DA8FE]
-                            hover:text-white
-                        "
-                    >
-                        <ChevronLeft size={20} />
-                    </Link>
-
-                    <h1 className="flex-1 text-center text-lg font-semibold text-slate-900">
-                        Company Profile
-                    </h1>
-
-                    {/* Balance the layout */}
-                    <div className="w-10" />
-
-                </div>
-            </header>
-
-            <div className="space-y-6 p-5">
-
-                {/* ===========================
-                    Hero Card
-                ============================ */}
+                {/* =================================================
+                    HERO
+                ================================================== */}
                 <section
                     className="
                         relative
                         overflow-hidden
-                        rounded-3xl
-                        bg-gradient-to-br
-                        from-[#EAF4FF]
-                        via-[#7CC0FF]
-                        to-[#4DA8FE]
-                        p-7
-                        shadow-[0_20px_50px_-15px_rgba(77,168,254,.45)]
+                        rounded-[28px]
+                        bg-slate-950
+                        px-5
+                        py-7
+                        shadow-[0_18px_45px_rgba(15,23,42,0.14)]
+
+                        sm:rounded-[32px]
+                        sm:px-8
+                        sm:py-9
                     "
                 >
-                    {/* Decorative circles */}
-                    <div className="absolute -right-12 -top-12 h-40 w-40 rounded-full bg-white/25 blur-2xl" />
-                    <div className="absolute -bottom-10 -left-10 h-32 w-32 rounded-full bg-white/20 blur-xl" />
+                    {/* Background glow */}
+                    <div
+                        className="
+                            pointer-events-none
+                            absolute
+                            -right-20
+                            -top-20
+                            h-56
+                            w-56
+                            rounded-full
+                            bg-[#4DA8FE]/25
+                            blur-3xl
+                        "
+                    />
+
+                    <div
+                        className="
+                            pointer-events-none
+                            absolute
+                            -bottom-24
+                            -left-20
+                            h-52
+                            w-52
+                            rounded-full
+                            bg-[#7CC0FF]/10
+                            blur-3xl
+                        "
+                    />
+
+                    {/* Grid detail */}
+                    <div
+                        className="
+                            pointer-events-none
+                            absolute
+                            inset-0
+                            opacity-[0.035]
+                            [background-image:linear-gradient(rgba(255,255,255,.8)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.8)_1px,transparent_1px)]
+                            [background-size:32px_32px]
+                        "
+                    />
 
                     <div className="relative">
-
+                        {/* Badge */}
                         <div
                             className="
                                 inline-flex
                                 items-center
-                                gap-2
+                                gap-1.5
                                 rounded-full
-                                bg-white/30
-                                px-3
+                                border
+                                border-white/10
+                                bg-white/[0.07]
+                                px-2.5
                                 py-1.5
-                                backdrop-blur
                             "
                         >
                             <Sparkles
-                                size={15}
-                                className="text-white"
+                                className="h-3.5 w-3.5 text-[#7CC0FF]"
+                                strokeWidth={1.8}
                             />
 
-                            <span className="text-xs font-semibold text-slate-900">
+                            <span
+                                className="
+                                    text-[10px]
+                                    font-semibold
+                                    uppercase
+                                    tracking-[0.12em]
+                                    text-slate-300
+                                "
+                            >
                                 About WIICO
                             </span>
                         </div>
 
-                        <h2 className="mt-5 text-3xl font-bold leading-tight text-slate-900">
-                            Building the Future of
-                            <br />
-                            E-Commerce Marketing
-                        </h2>
+                        {/* Heading */}
+                        <h1
+                            className="
+                                mt-5
+                                max-w-[540px]
+                                text-[30px]
+                                font-semibold
+                                leading-[1.08]
+                                tracking-[-0.04em]
+                                text-white
 
-                        <p className="mt-4 max-w-sm text-sm leading-7 text-slate-800">
-                            Helping merchants grow faster through intelligent
-                            digital marketing, global partnerships and an
-                            innovative reward ecosystem.
+                                sm:text-[40px]
+                            "
+                        >
+                            Building the future of
+                            <span className="block text-[#7CC0FF]">
+                                e-commerce marketing.
+                            </span>
+                        </h1>
+
+                        <p
+                            className="
+                                mt-4
+                                max-w-[520px]
+                                text-[13px]
+                                leading-6
+                                text-slate-400
+
+                                sm:text-[14px]
+                                sm:leading-7
+                            "
+                        >
+                            Helping merchants grow through intelligent
+                            digital marketing, global partnerships and
+                            an innovative reward ecosystem.
                         </p>
 
-                        {/* Quick stats */}
-                        <div className="mt-6 flex gap-6 border-t border-white/30 pt-5">
-                            <div>
-                                <p className="text-lg font-bold text-slate-900">
-                                    2025
-                                </p>
-                                <p className="text-xs text-slate-800/80">
-                                    Founded
-                                </p>
-                            </div>
+                        {/* Stats */}
+                        <div
+                            className="
+                                mt-7
+                                grid
+                                grid-cols-3
+                                border-t
+                                border-white/10
+                                pt-5
+                            "
+                        >
+                            <HeroStat
+                                value="2025"
+                                label="Founded"
+                            />
 
-                            <div>
-                                <p className="text-lg font-bold text-slate-900">
-                                    3+
-                                </p>
-                                <p className="text-xs text-slate-800/80">
-                                    Global Marketplaces
-                                </p>
-                            </div>
+                            <HeroStat
+                                value="3+"
+                                label="Marketplaces"
+                            />
 
-                            <div>
-                                <p className="text-lg font-bold text-slate-900">
-                                    60%
-                                </p>
-                                <p className="text-xs text-slate-800/80">
-                                    Revenue Shared
-                                </p>
-                            </div>
+                            <HeroStat
+                                value="60%"
+                                label="Revenue Shared"
+                            />
                         </div>
-
                     </div>
                 </section>
 
-                {/* ===========================
-                    Company Information
-                ============================ */}
-                <section className="space-y-5">
+                {/* =================================================
+                    INTRODUCTION
+                ================================================== */}
+                <section className="mt-8 sm:mt-10">
+                    <div className="flex items-center gap-2">
+                        <span
+                            className="
+                                h-1.5
+                                w-1.5
+                                rounded-full
+                                bg-[#4DA8FE]
+                            "
+                        />
 
-                    {sections.map((section, i) => {
+                        <span
+                            className="
+                                text-[10px]
+                                font-semibold
+                                uppercase
+                                tracking-[0.14em]
+                                text-[#2B84E0]
+                            "
+                        >
+                            About the company
+                        </span>
+                    </div>
+
+                    <h2
+                        className="
+                            mt-2
+                            max-w-xl
+                            text-[23px]
+                            font-semibold
+                            leading-tight
+                            tracking-tight
+                            text-slate-900
+
+                            sm:text-[28px]
+                        "
+                    >
+                        Connecting commerce,
+                        <span className="text-slate-400">
+                            {" "}
+                            technology and opportunity.
+                        </span>
+                    </h2>
+                </section>
+
+                {/* =================================================
+                    STORY SECTIONS
+                ================================================== */}
+                <div className="mt-6 space-y-3 sm:mt-7 sm:space-y-4">
+                    {sections.map((section) => {
                         const Icon = section.icon;
 
                         return (
                             <article
-                                key={section.title}
+                                key={section.number}
                                 className="
                                     group
-                                    rounded-3xl
+                                    relative
+                                    overflow-hidden
+                                    rounded-[22px]
                                     border
-                                    border-slate-200
+                                    border-slate-200/80
                                     bg-white
-                                    p-6
-                                    shadow-sm
-                                    transition
+                                    p-5
+                                    shadow-[0_5px_20px_rgba(15,23,42,0.035)]
+                                    transition-all
+                                    duration-300
                                     hover:border-[#4DA8FE]/30
-                                    hover:shadow-md
+                                    hover:shadow-[0_12px_30px_rgba(15,23,42,0.07)]
+
+                                    sm:rounded-[24px]
+                                    sm:p-6
                                 "
                             >
-                                <div className="flex items-center gap-4">
+                                {/* Number */}
+                                <span
+                                    className="
+                                        pointer-events-none
+                                        absolute
+                                        right-4
+                                        top-2
+                                        select-none
+                                        text-[58px]
+                                        font-bold
+                                        leading-none
+                                        tracking-[-0.06em]
+                                        text-slate-100
 
-                                    <div
-                                        className="
-                                            relative
-                                            flex
-                                            h-12
-                                            w-12
-                                            shrink-0
-                                            items-center
-                                            justify-center
-                                            rounded-2xl
-                                            bg-[#4DA8FE]/10
-                                            transition
-                                            group-hover:bg-[#4DA8FE]/15
-                                        "
-                                    >
-                                        <Icon
-                                            size={22}
-                                            className="text-[#2B84E0]"
-                                        />
+                                        sm:right-6
+                                        sm:text-[68px]
+                                    "
+                                >
+                                    {section.number}
+                                </span>
 
-                                        <span
+                                <div className="relative">
+                                    {/* Section heading */}
+                                    <div className="flex items-center gap-3">
+                                        <div
                                             className="
-                                                absolute
-                                                -right-1.5
-                                                -top-1.5
                                                 flex
-                                                h-5
-                                                w-5
+                                                h-10
+                                                w-10
+                                                shrink-0
                                                 items-center
                                                 justify-center
-                                                rounded-full
-                                                bg-slate-900
-                                                text-[10px]
-                                                font-bold
-                                                text-white
+                                                rounded-xl
+                                                bg-[#4DA8FE]/10
+                                                text-[#2B84E0]
+
+                                                sm:h-11
+                                                sm:w-11
                                             "
                                         >
-                                            {i + 1}
-                                        </span>
+                                            <Icon
+                                                className="h-[18px] w-[18px]"
+                                                strokeWidth={1.8}
+                                            />
+                                        </div>
+
+                                        <div className="min-w-0">
+                                            <p
+                                                className="
+                                                    text-[9px]
+                                                    font-semibold
+                                                    uppercase
+                                                    tracking-[0.14em]
+                                                    text-[#4DA8FE]
+                                                "
+                                            >
+                                                {section.eyebrow}
+                                            </p>
+
+                                            <h3
+                                                className="
+                                                    mt-0.5
+                                                    text-[16px]
+                                                    font-semibold
+                                                    tracking-tight
+                                                    text-slate-900
+
+                                                    sm:text-[17px]
+                                                "
+                                            >
+                                                {section.title}
+                                            </h3>
+                                        </div>
                                     </div>
 
-                                    <div>
-                                        <h3 className="text-lg font-semibold text-slate-900">
-                                            {section.title}
-                                        </h3>
+                                    {/* Content */}
+                                    <p
+                                        className="
+                                            mt-4
+                                            text-[13px]
+                                            leading-6
+                                            text-slate-500
 
-                                        <div className="mt-1 h-1 w-12 rounded-full bg-[#4DA8FE]" />
-                                    </div>
-
+                                            sm:text-[14px]
+                                            sm:leading-7
+                                        "
+                                    >
+                                        {section.content}
+                                    </p>
                                 </div>
-
-                                <p className="mt-5 text-[15px] leading-8 text-slate-600">
-                                    {section.content}
-                                </p>
                             </article>
                         );
                     })}
+                </div>
 
-                </section>
-
-                {/* ===========================
-                    Bottom Card
-                ============================ */}
+                {/* =================================================
+                    MEMBER ECOSYSTEM HIGHLIGHT
+                ================================================== */}
                 <section
                     className="
                         relative
+                        mt-6
                         overflow-hidden
-                        rounded-3xl
-                        bg-slate-900
-                        p-7
-                        text-white
+                        rounded-[24px]
+                        border
+                        border-[#4DA8FE]/15
+                        bg-[#edf6ff]
+                        p-5
+
+                        sm:mt-7
+                        sm:p-6
                     "
                 >
-                    <div className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-[#4DA8FE]/20 blur-3xl" />
+                    <div
+                        className="
+                            pointer-events-none
+                            absolute
+                            -right-10
+                            -top-10
+                            h-32
+                            w-32
+                            rounded-full
+                            bg-[#4DA8FE]/10
+                            blur-2xl
+                        "
+                    />
 
-                    <h3 className="relative text-xl font-semibold">
-                        Our Mission
-                    </h3>
+                    <div className="relative flex gap-3.5">
+                        <div
+                            className="
+                                flex
+                                h-10
+                                w-10
+                                shrink-0
+                                items-center
+                                justify-center
+                                rounded-xl
+                                bg-white
+                                text-[#2B84E0]
+                                shadow-sm
+                            "
+                        >
+                            <ShieldCheck
+                                className="h-[19px] w-[19px]"
+                                strokeWidth={1.8}
+                            />
+                        </div>
 
-                    <div className="relative mt-2 h-1 w-12 rounded-full bg-[#4DA8FE]" />
+                        <div>
+                            <p
+                                className="
+                                    text-[10px]
+                                    font-semibold
+                                    uppercase
+                                    tracking-[0.12em]
+                                    text-[#2B84E0]
+                                "
+                            >
+                                Our Ecosystem
+                            </p>
 
-                    <p className="relative mt-5 text-sm leading-7 text-slate-300">
-                        To empower businesses worldwide with innovative digital
-                        marketing solutions while creating meaningful earning
-                        opportunities for our growing global community of
-                        members.
-                    </p>
+                            <h3
+                                className="
+                                    mt-1
+                                    text-[16px]
+                                    font-semibold
+                                    tracking-tight
+                                    text-slate-900
+                                "
+                            >
+                                Built around shared growth
+                            </h3>
+
+                            <p
+                                className="
+                                    mt-2
+                                    text-[12px]
+                                    leading-5
+                                    text-slate-500
+
+                                    sm:text-[13px]
+                                    sm:leading-6
+                                "
+                            >
+                                Merchants gain greater visibility and
+                                sales performance while members
+                                participate in promotional campaigns
+                                and receive rewards.
+                            </p>
+                        </div>
+                    </div>
                 </section>
 
-            </div>
+                {/* =================================================
+                    MISSION
+                ================================================== */}
+                <section
+                    className="
+                        relative
+                        mt-6
+                        overflow-hidden
+                        rounded-[26px]
+                        bg-slate-900
+                        px-5
+                        py-7
 
+                        sm:mt-7
+                        sm:rounded-[30px]
+                        sm:px-7
+                        sm:py-8
+                    "
+                >
+                    <div
+                        className="
+                            pointer-events-none
+                            absolute
+                            -right-12
+                            -top-12
+                            h-40
+                            w-40
+                            rounded-full
+                            bg-[#4DA8FE]/20
+                            blur-3xl
+                        "
+                    />
+
+                    <div className="relative">
+                        <div className="flex items-center gap-2">
+                            <span
+                                className="
+                                    h-1.5
+                                    w-1.5
+                                    rounded-full
+                                    bg-[#7CC0FF]
+                                "
+                            />
+
+                            <span
+                                className="
+                                    text-[10px]
+                                    font-semibold
+                                    uppercase
+                                    tracking-[0.14em]
+                                    text-[#7CC0FF]
+                                "
+                            >
+                                Our Mission
+                            </span>
+                        </div>
+
+                        <h2
+                            className="
+                                mt-4
+                                max-w-lg
+                                text-[24px]
+                                font-semibold
+                                leading-tight
+                                tracking-tight
+                                text-white
+
+                                sm:text-[30px]
+                            "
+                        >
+                            Making digital commerce
+                            <span className="text-[#7CC0FF]">
+                                {" "}
+                                more accessible.
+                            </span>
+                        </h2>
+
+                        <p
+                            className="
+                                mt-4
+                                max-w-xl
+                                text-[13px]
+                                leading-6
+                                text-slate-400
+
+                                sm:text-[14px]
+                                sm:leading-7
+                            "
+                        >
+                            To empower businesses worldwide with
+                            innovative digital marketing solutions
+                            while creating meaningful earning
+                            opportunities for our growing global
+                            community of members.
+                        </p>
+
+                        <div
+                            className="
+                                mt-6
+                                inline-flex
+                                items-center
+                                gap-2
+                                text-[11px]
+                                font-semibold
+                                text-slate-300
+                            "
+                        >
+                            <span>WIICO</span>
+
+                            <ArrowUpRight
+                                className="h-3.5 w-3.5 text-[#7CC0FF]"
+                                strokeWidth={2}
+                            />
+                        </div>
+                    </div>
+                </section>
+            </div>
         </main>
     );
 }

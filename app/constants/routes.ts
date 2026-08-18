@@ -5,7 +5,7 @@ export const ROUTES = {
 
     ORDERS: "/dashboard/order",
 
-    MESSAGES: "/messages",
+    CHAT: "/dashboard/chat",
 
     DEPOSIT: "/dashboard/wallet/deposit",
 
@@ -20,6 +20,10 @@ export const ROUTES = {
     TRANSACTIONS: "/dashboard/transactions",
 
     PROFILE: "/dashboard/profile",
+
+    PROFILE_SETTINGS: "/dashboard/settings/profile",
+
+    SETTINGS: "/dashboard/settings",
     
     MEMBERS: "/dashboard/membership",
 
@@ -37,7 +41,7 @@ export const ROUTES = {
 
     DASHBOARD: "/dashboard",
 
-    ADMIN_DASHBOARD: "/admin/dashboard",
+    ADMIN_DASHBOARD: "/admin",
 
     ADMIN_ADVERTISEMENT: "/admin/advertisements"
 } as const;
