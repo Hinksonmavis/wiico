@@ -33,13 +33,13 @@ const MENU_ITEMS: MenuItem[] = [
     {
         icon: TeamExpansionIcon,
         line1: "Referrals",
-        href: "/referrals",
+        href: ROUTES.REFERRALS,
     },
     {
         icon: MembershipWelfareIcon,
         line1: "Partner",
         line2: "Welfare",
-        href: "/partner-welfare",
+        href: ROUTES.SHARES,
     },
 ];
 
@@ -58,3 +58,5 @@ export default function MenuGrid() {
         </div>
     );
 }
+
+

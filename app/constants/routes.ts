@@ -13,11 +13,13 @@ export const ROUTES = {
 
     WITHDRAWAL: "/dashboard/wallet/withdrawal",
 
-    // REFERRALS: "/referrals",
+    REFERRALS: "/dashboard/referrals",
 
     WALLET: "/dashboard/wallet",
 
     TRANSACTIONS: "/dashboard/transactions",
+
+    SHARES: "/dashboard/shares",
 
     PROFILE: "/dashboard/profile",
 

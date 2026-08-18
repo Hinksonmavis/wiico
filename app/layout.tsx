@@ -46,7 +46,7 @@ export default function RootLayout({
                 `}
                 // className={`font-serif antialiased bg-slate-100 overflow-hidden`}
             >
-                <SecurityProtection />
+                {/* <SecurityProtection /> */}
                 {/* =====================================================
                     Desktop Stage
                     - Centers the mobile app shell.
