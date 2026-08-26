@@ -87,7 +87,7 @@ export default function ShareActions({
 
                         <div className="absolute right-0 z-20 mt-2 w-48 overflow-hidden rounded-xl border border-slate-200 bg-white py-1 shadow-lg">
 
-                            {status === "STARTED" && (
+                            {status === "started" && (
                                 <>
 
                                     <button
@@ -124,7 +124,7 @@ export default function ShareActions({
                                 </>
                             )}
 
-                            {status === "IN_PROGRESS" && (
+                            {status === "in_progress" && (
                                 <button
                                     type="button"
                                     onClick={() =>
@@ -143,7 +143,7 @@ export default function ShareActions({
                                 </button>
                             )}
 
-                            {status === "CLOSED" && (
+                            {status === "closed" && (
                                 <div className="px-3 py-2.5 text-xs text-slate-400">
                                     No actions available
                                 </div>
