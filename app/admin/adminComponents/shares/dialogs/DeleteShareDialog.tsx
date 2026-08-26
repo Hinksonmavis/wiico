@@ -37,7 +37,7 @@ export default function DeleteShareDialog({
     }
 
     const canDelete =
-        status === "STARTED";
+        status === "started";
 
     const handleConfirm = () => {
 

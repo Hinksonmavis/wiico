@@ -342,6 +342,10 @@ export default function AdminShareDetailsPage() {
                             share.id
                         }
 
+                        shareName={
+                            share.name
+                        }
+
                         isLoading={
                             purchasersQuery.isLoading
                         }
