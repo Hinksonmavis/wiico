@@ -42,7 +42,7 @@ const ITEMS: SettingsItem[] = [
     {
         icon: FileSignature,
         label: "Privacy Policy",
-        href: "/privacy-policy",
+        href: ROUTES.PRIVACY_POLICY,
     },
     {
         icon: FileText,

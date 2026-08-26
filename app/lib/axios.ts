@@ -4,7 +4,6 @@ import axios, {
 } from "axios";
 
 import { useAuthStore } from "../store/auth.store";
-import { ROUTES } from "../constants/routes";
 
 interface RetryRequestConfig
     extends InternalAxiosRequestConfig {
@@ -22,73 +21,109 @@ interface RefreshApiResponse {
     data: RefreshResponse;
 }
 
+// ============================================================
 // API CONFIGURATION
+// ============================================================
+
 const API_URL =
     process.env.NEXT_PUBLIC_API_URL ??
     "http://localhost:5000/api/v1";
 
-
+// ============================================================
 // MAIN AXIOS CLIENT
+// ============================================================
+//
+// Do not set a global Content-Type header here.
+// Axios must set multipart boundaries for FormData uploads.
+//
+
 const axiosInstance = axios.create({
     baseURL: API_URL,
-
-    headers: {
-        "Content-Type": "application/json",
-    },
-
     withCredentials: true,
 });
 
-
+// ============================================================
 // REFRESH CLIENT
-// This client intentionally has no interceptors.
-// It is used only to refresh the access token.
+// ============================================================
 //
-// This prevents: /auth/refresh -> 401 -> refresh -> /auth/refresh -> ...
+// This client deliberately has no interceptors, so a failed
+// refresh request cannot trigger another refresh request.
+//
+
 const refreshClient = axios.create({
     baseURL: API_URL,
-
-    headers: {
-        "Content-Type": "application/json",
-    },
-
     withCredentials: true,
 });
 
-
+// ============================================================
 // SHARED REFRESH PROMISE
-// If several requests receive 401 at the same time,
-// only one refresh request will be sent.
+// ============================================================
 //
-// The other requests wait for the same promise.
-let refreshPromise: Promise<RefreshResponse> | null = null;
+// Multiple simultaneous 401 responses share one refresh call.
+//
 
+let refreshPromise: Promise<RefreshResponse> | null =
+    null;
 
+// ============================================================
+// HELPERS
+// ============================================================
+
+const shouldSkipRefresh = (
+    request?: RetryRequestConfig,
+) => {
+    const url = request?.url ?? "";
+
+    return [
+        "/auth/login",
+        "/auth/register",
+        "/auth/refresh",
+    ].some((endpoint) => url.includes(endpoint));
+};
+
+const notifySessionExpired = () => {
+    if (typeof window === "undefined") {
+        return;
+    }
+
+    window.dispatchEvent(
+        new Event("auth:session-expired"),
+    );
+};
+
+// ============================================================
 // REQUEST INTERCEPTOR
-// Adds the current access token to every authenticated request.
+// ============================================================
+//
+// Attach the access token to outgoing authenticated requests.
+//
+
 axiosInstance.interceptors.request.use(
     (
         config: InternalAxiosRequestConfig,
     ) => {
-        const token = useAuthStore.getState().accessToken;
+        const token =
+            useAuthStore
+                .getState()
+                .accessToken;
 
-        if (token) {
+        if (!token) {
+            return config;
+        }
 
-            // Always convert the headers object to
-            // AxiosHeaders so we can safely use .set().
-            const headers = config.headers instanceof AxiosHeaders
+        const headers =
+            config.headers instanceof AxiosHeaders
                 ? config.headers
                 : new AxiosHeaders(
                     config.headers,
                 );
 
-            headers.set(
-                "Authorization",
-                `Bearer ${token}`,
-            );
+        headers.set(
+            "Authorization",
+            `Bearer ${token}`,
+        );
 
-            config.headers = headers;
-        }
+        config.headers = headers;
 
         return config;
     },
@@ -98,59 +133,40 @@ axiosInstance.interceptors.request.use(
     },
 );
 
-
+// ============================================================
 // RESPONSE INTERCEPTOR
+// ============================================================
 //
-// Handles expired access tokens.
+// On a protected request:
+// 401 → refresh tokens once → retry original request.
 //
-// Flow:
+// Login, registration, and refresh requests never enter this
+// flow. Invalid credentials must show an error, not reload the
+// browser.
 //
-// Request
-//    ↓
-// 401
-//    ↓
-// Refresh access token
-//    ↓
-// Save new tokens
-//    ↓
-// Retry original request
-//
-// A 403 is NOT refreshed.
-axiosInstance.interceptors.response.use(
 
-    // SUCCESS
+axiosInstance.interceptors.response.use(
     (response) => {
         return response;
     },
 
-    // ERROR
     async (error) => {
-        const originalRequest = error.config as
-            | RetryRequestConfig
-            | undefined;
+        const originalRequest =
+            error.config as
+                | RetryRequestConfig
+                | undefined;
 
-        
-        // No request information.
         if (!originalRequest) {
             return Promise.reject(error);
         }
 
-        // Never refresh the refresh endpoint.
-        if (
-            originalRequest.url?.includes(
-                "/auth/refresh",
-            )
-        ) {
+        // Invalid credentials from Login/Register are normal
+        // form errors, not expired-session errors.
+        if (shouldSkipRefresh(originalRequest)) {
             return Promise.reject(error);
         }
 
-        // Only refresh on 401.
-        //
-        // 401 = missing/invalid/expired authentication.
-        //
-        // 403 = authenticated but forbidden.
-        //
-        // Therefore 403 must NOT trigger refresh.
+        // Refresh only a first 401 response.
         if (
             error.response?.status !== 401 ||
             originalRequest._retry
@@ -158,22 +174,21 @@ axiosInstance.interceptors.response.use(
             return Promise.reject(error);
         }
 
-        // Mark this request so it cannot refresh repeatedly.
         originalRequest._retry = true;
 
         try {
-            const auth = useAuthStore.getState();
+            const auth =
+                useAuthStore.getState();
 
-            const currentRefreshToken = auth.refreshToken;
+            const currentRefreshToken =
+                auth.refreshToken;
 
-            // Refresh token does not exist.
             if (!currentRefreshToken) {
                 throw new Error(
                     "Missing refresh token.",
                 );
             }
 
-            // START REFRESH REQUEST
             if (!refreshPromise) {
                 refreshPromise =
                     refreshClient
@@ -184,52 +199,45 @@ axiosInstance.interceptors.response.use(
                                     currentRefreshToken,
                             },
                         )
-                        .then(
-                            (response) => {
+                        .then((response) => {
+                            const {
+                                accessToken,
+                                refreshToken,
+                            } = response.data.data;
 
-                                const {
-                                    accessToken,
-                                    refreshToken,
-                                } = response.data.data;
+                            if (
+                                !accessToken ||
+                                !refreshToken
+                            ) {
+                                throw new Error(
+                                    "Refresh response did not include valid tokens.",
+                                );
+                            }
 
-                                // Get the latest state.
-                                const currentAuth = useAuthStore.getState();
-
-                                // The refresh endpoint returns only tokens.
-                                //
-                                // Keep the existing user in the auth store.
-                                if (!currentAuth.user) {
-                                    throw new Error(
-                                        "Authenticated user is missing.",
-                                    );
-                                }
-
-                                // Update authentication tokens.
-                                currentAuth.login(
+                            // A user may legitimately be null
+                            // during initial application startup.
+                            // Do not reject a valid token refresh.
+                            useAuthStore
+                                .getState()
+                                .login(
                                     accessToken,
                                     refreshToken,
                                 );
 
-                                return {
-                                    accessToken,
-                                    refreshToken,
-                                };
-                            },
-                        )
+                            return {
+                                accessToken,
+                                refreshToken,
+                            };
+                        })
                         .finally(() => {
-
-                            // Allow another refresh later.
                             refreshPromise = null;
-
                         });
             }
 
-            // WAIT FOR REFRESH
             const {
                 accessToken,
             } = await refreshPromise;
 
-            // RETRY ORIGINAL REQUEST
             const headers =
                 originalRequest.headers instanceof
                 AxiosHeaders
@@ -243,42 +251,19 @@ axiosInstance.interceptors.response.use(
                 `Bearer ${accessToken}`,
             );
 
-            originalRequest.headers =
-                headers;
+            originalRequest.headers = headers;
 
-            return axiosInstance(
-                originalRequest,
-            );
-
+            return axiosInstance(originalRequest);
         } catch (refreshError) {
-
-            // =================================================
-            // REFRESH FAILED
-            // =================================================
-            //
-            // The refresh token is invalid/expired or the
-            // authenticated session can no longer be restored.
-            //
-            // Clear authentication and send the user to login.
-            // =================================================
-
             useAuthStore
                 .getState()
                 .logout();
 
-            if (
-                typeof window !==
-                "undefined"
-            ) {
+            // Do not use window.location.replace().
+            // It forces a full browser reload and caused the loop.
+            notifySessionExpired();
 
-                window.location.replace(
-                    ROUTES.LOGIN,
-                );
-            }
-
-            return Promise.reject(
-                refreshError,
-            );
+            return Promise.reject(refreshError);
         }
     },
 );

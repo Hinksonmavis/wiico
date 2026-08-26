@@ -26,6 +26,8 @@ export const ROUTES = {
     PROFILE_SETTINGS: "/dashboard/settings/profile",
 
     SETTINGS: "/dashboard/settings",
+
+    PRIVACY_POLICY: "/dashboard/privacy-policy",
     
     MEMBERS: "/dashboard/membership",
 
@@ -40,6 +42,8 @@ export const ROUTES = {
     FORGOT_PASSWORD: "/forgot-password",
 
     ADMIN_LOGIN: "/admin/login",
+
+    ADMIN_SHARES: "/admin/shares",
 
     DASHBOARD: "/dashboard",
 

@@ -10,6 +10,8 @@ import {
 import { sections } from "@/app/constants/about";
 import HeroStat from "@/app/components/about/HeroStat";
 import AboutHeader from "@/app/components/about/AboutHeader";
+import Link from "next/link";
+import { ROUTES } from "@/app/constants/routes";
 
 
 export default function AboutCompany() {
@@ -145,7 +147,7 @@ export default function AboutCompany() {
                         >
                             Building the future of
                             <span className="block text-[#7CC0FF]">
-                                e-commerce marketing.
+                                Investment Trust.
                             </span>
                         </h1>
 
@@ -161,9 +163,7 @@ export default function AboutCompany() {
                                 sm:leading-7
                             "
                         >
-                            Helping merchants grow through intelligent
-                            digital marketing, global partnerships and
-                            an innovative reward ecosystem.
+                            We are the world's irst Interactive Conflict to Development Investment Trust, operating in direct collaboration with the UN
                         </p>
 
                         {/* Stats */}
@@ -235,10 +235,10 @@ export default function AboutCompany() {
                             sm:text-[28px]
                         "
                     >
-                        Connecting commerce,
+                        World International Intervention
                         <span className="text-slate-400">
                             {" "}
-                            technology and opportunity.
+                            Corporative Organization (WIICO)
                         </span>
                     </h2>
                 </section>
@@ -456,10 +456,7 @@ export default function AboutCompany() {
                                     sm:leading-6
                                 "
                             >
-                                Merchants gain greater visibility and
-                                sales performance while members
-                                participate in promotional campaigns
-                                and receive rewards.
+                                Passive income is good. Active income is better.  But purpose-driven active income? That is WIICO.
                             </p>
                         </div>
                     </div>
@@ -535,10 +532,10 @@ export default function AboutCompany() {
                                 sm:text-[30px]
                             "
                         >
-                            Making digital commerce
+                            Join the Daily
                             <span className="text-[#7CC0FF]">
                                 {" "}
-                                more accessible.
+                                Intervention Economy
                             </span>
                         </h2>
 
@@ -554,14 +551,11 @@ export default function AboutCompany() {
                                 sm:leading-7
                             "
                         >
-                            To empower businesses worldwide with
-                            innovative digital marketing solutions
-                            while creating meaningful earning
-                            opportunities for our growing global
-                            community of members.
+                            Profit now. Help the world heal. Repeat every single day.  "Don't just watch the world heal. Click to heal it and get paid weekly for it."
                         </p>
 
-                        <div
+                        <Link
+                            href={ROUTES.ORDERS}
                             className="
                                 mt-6
                                 inline-flex
@@ -578,7 +572,7 @@ export default function AboutCompany() {
                                 className="h-3.5 w-3.5 text-[#7CC0FF]"
                                 strokeWidth={2}
                             />
-                        </div>
+                        </Link>
                     </div>
                 </section>
             </div>

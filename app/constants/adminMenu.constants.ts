@@ -1,4 +1,4 @@
-import { BadgeDollarSign, ClipboardList, Coins, CreditCard, FileBarChart2, Film, LayoutDashboard, Package, Settings, Users, Wallet } from "lucide-react";
+import { BadgeDollarSign, ClipboardList, Coins, CreditCard, FileBarChart2, Film, Layers3, LayoutDashboard, Package, Settings, Users, Wallet } from "lucide-react";
 import { MenuItem } from "../types/adminTypes/adminMenu.types";
 
 export const MANAGEMENT: MenuItem[] = [
@@ -49,6 +49,12 @@ export const BUSINESS: MenuItem[] = [
         title: "Transactions",
         href: "/admin/transactions",
         icon: Wallet,
+    },
+    {
+        title: "Shares",
+        // description: "Manage investment shares",
+        href: "/admin/shares",
+        icon: Layers3,
     },
     {
         title: "Reports",

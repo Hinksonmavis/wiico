@@ -6,3 +6,4 @@ export * from "./WithdrawalSummary";
 export * from "./WihdrawalForm";
 export * from "./WithdrawalEmptyState";
 export * from "./WithdrawalHistory";
+export * from "./WithdrawalResultModal";

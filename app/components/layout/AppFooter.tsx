@@ -24,7 +24,7 @@ const tabs = [
         icon: MessageCircle,
     },
     {
-        label: "Orders",
+        label: "Supply",
         href: ROUTES.ORDERS,
         icon: ShoppingBag,
         center: true,

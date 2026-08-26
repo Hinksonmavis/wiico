@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ChevronRight, Building2 } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 
 import { ROUTES } from "@/app/constants/routes";
 
@@ -82,13 +82,8 @@ export default function AboutCompany() {
                 <span className="font-semibold text-slate-900">
                     WIICO
                 </span>{" "}
-                was founded in <strong>2025</strong> and is headquartered in
-                <strong> Melbourne, Australia</strong>. We specialize in
-                providing precision online marketing solutions for global
-                e-commerce platforms. Our mission is to help merchants increase
-                product visibility, attract more customers, and accelerate
-                business growth through innovative digital advertising and
-                referral technologies.
+                We are the world's first <strong>Interactive Conflict</strong> to
+                <strong> Development Investment Trust,</strong> operating in direct collaboration with the UN. You buy shares in post war reconstruction. You receive a guaranteed base dividend every single week......
             </p>
         </section>
     );

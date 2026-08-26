@@ -7,6 +7,8 @@ import { ROUTES } from "@/app/constants/routes";
 import SavingsJarScene from "../ilustrations/SavingsJarScene";
 import PaymentScene from "../ilustrations/PaymentScene";
 import GrowthScene from "../ilustrations/GrowthScene";
+import { HamburgerIcon, Menu } from "lucide-react";
+import WiicoLogo from "./WiicoLogo";
 
 interface Slide {
     illustration: ComponentType;
@@ -17,18 +19,15 @@ interface Slide {
 const SLIDES: Slide[] = [
     {
         illustration: SavingsJarScene,
-        title: ["Safe and Secure", "Worry-Free"],
-        body: "Real Order, transparent processes, and escrowed payments — every step is designed to protect your safety.",
+        title: ["World International Intervention Corporative Organization (WIICO)"],
+
+        body: "We are the world’s first Interactive Conflict to Development Investment Trust, operating in direct collaboration with the UN. You buy shares in post war reconstruction. You receive a guaranteed base dividend every single week.",
     },
     {
         illustration: PaymentScene,
-        title: ["Easy Order Visible", "Rewards"],
-        body: "Complete Order to earn instantly. Fast withdrawals supported — your time deserves greater value.",
-    },
-    {
-        illustration: GrowthScene,
-        title: ["One-Tap to Start", "Zero Learning Curve"],
-        body: "Clear steps, simple submission, and automatic payouts — even beginners can start earning effortlessly.",
+        title: ["This is where we shatter every investment model"],
+
+        body: "Your daily engagement determines how much extra you earn on top of that.We believe your attention is an asset. Your voice is capital. Your daily choices can literally move markets and move mountains of aid. Passive income is good. Active income is better. But purpose-driven active income? That is WIICO.",
     },
 ];
 
@@ -153,93 +152,14 @@ export default function OnboardingSlider() {
 
             {/* Illustration */}
             <div className="relative flex-1 overflow-hidden">
-                {/* Decorative Rings */}
-                <svg
-                    className="pointer-events-none absolute inset-0 -z-10 h-full w-full opacity-40"
-                    viewBox="0 0 400 500"
-                    preserveAspectRatio="none"
-                >
-                    <ellipse
-                        cx="60"
-                        cy="220"
-                        rx="90"
-                        ry="60"
-                        stroke="#D8E6F6"
-                        strokeDasharray="5 6"
-                        fill="none"
-                    />
-
-                    <ellipse
-                        cx="330"
-                        cy="140"
-                        rx="70"
-                        ry="45"
-                        stroke="#D8E6F6"
-                        strokeDasharray="5 6"
-                        fill="none"
-                    />
-                </svg>
 
                 <div
                     className="flex h-full transition-transform duration-500 ease-out"
-                    style={{
-                        transform: `translateX(-${index * 100}%)`,
-                    }}
+                    // style={{
+                    //     transform: `translateX(-${index * 100}%)`,
+                    // }}
                 >
-                    {SLIDES.map((slide, i) => {
-                        const Illustration =
-                            slide.illustration;
-
-                        return (
-                            <div
-                                key={i}
-                                className="
-                                    flex
-                                    h-full
-                                    w-full
-                                    shrink-0
-                                    items-center
-                                    justify-center
-                                    px-8
-                                    pt-12
-                                    pb-6
-                                "
-                            >
-                                <div
-                                    className="
-                                        relative
-                                        flex
-                                        h-72
-                                        w-72
-                                        items-center
-                                        justify-center
-                                    "
-                                >
-                                    {/* Glow */}
-                                    <div
-                                        className="
-                                            absolute
-                                            inset-0
-                                            rounded-full
-                                            bg-sky-200/20
-                                            blur-3xl
-                                        "
-                                    />
-
-                                    <div
-                                        className="
-                                            relative
-                                            h-full
-                                            w-full
-                                            drop-shadow-[0_30px_50px_rgba(20,145,255,0.18)]
-                                        "
-                                    >
-                                        <Illustration />
-                                    </div>
-                                </div>
-                            </div>
-                        );
-                    })}
+                    <WiicoLogo />
                 </div>
             </div>
 
@@ -316,7 +236,7 @@ export default function OnboardingSlider() {
                             >
                                 <h2
                                     className="
-                                        text-[32px]
+                                        text-[28px]
                                         font-extrabold
                                         leading-[1.05]
                                         tracking-[-0.04em]

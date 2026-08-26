@@ -1,105 +1,80 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import axiosInstance from "@/app/lib/axios";
 import { useAuthStore } from "@/app/store/auth.store";
 
 export default function AuthProvider({
-    children,
+  children,
 }: {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }) {
-    const {
-        accessToken,
-        user,
-        setUser,
-        logout,
-    } = useAuthStore();
+  const accessToken = useAuthStore(
+    (state) => state.accessToken,
+  );
 
-    const [loading, setLoading] =
-        useState(true);
+  const user = useAuthStore(
+    (state) => state.user,
+  );
 
-    useEffect(() => {
-        let mounted = true;
+  const setUser = useAuthStore(
+    (state) => state.setUser,
+  );
 
-        async function initialize() {
-            /**
-             * No authenticated session.
-             */
-            if (!accessToken) {
-                if (mounted) {
-                    setLoading(false);
-                }
-
-                return;
-            }
-
-            /**
-             * User already loaded.
-             */
-            if (user) {
-                if (mounted) {
-                    setLoading(false);
-                }
-
-                return;
-            }
-
-            try {
-                const response =
-                    await axiosInstance.get(
-                        "/auth/me",
-                    );
-
-                if (!mounted) {
-                    return;
-                }
-
-                setUser(
-                    response.data.data,
-                );
-            } catch (error) {
-                console.error(
-                    "AuthProvider: failed to load current user:",
-                    error,
-                );
-
-                /**
-                 * IMPORTANT:
-                 *
-                 * Do not immediately logout here.
-                 *
-                 * We need to know whether the problem
-                 * is authentication, API availability,
-                 * token refresh, etc.
-                 */
-                if (mounted) {
-                    setLoading(false);
-                }
-
-                return;
-            }
-
-            if (mounted) {
-                setLoading(false);
-            }
-        }
-
-        initialize();
-
-        return () => {
-            mounted = false;
-        };
-    }, [
-        accessToken,
-        user,
-        setUser,
-    ]);
-
-    if (loading) {
-        return null;
+  useEffect(() => {
+    // Guest pages such as Login and Register should render normally.
+    if (!accessToken || user) {
+      return;
     }
 
-    return children;
+    const controller = new AbortController();
+
+    async function loadCurrentUser() {
+      try {
+        const response = await axiosInstance.get(
+          "/auth/me",
+          {
+            signal: controller.signal,
+          },
+        );
+
+        if (controller.signal.aborted) {
+          return;
+        }
+
+        const currentUser = response.data?.data;
+
+        if (currentUser) {
+          setUser(currentUser);
+        } else {
+          console.error(
+            "AuthProvider: /auth/me returned no user data.",
+          );
+        }
+      } catch (error) {
+        // React development mode can cancel the first request deliberately.
+        if (controller.signal.aborted) {
+          return;
+        }
+
+        console.error(
+          "AuthProvider: failed to load current user:",
+          error,
+        );
+
+        // Do not call router.refresh(), location.reload(), or logout here.
+        // A failed request must not cause a navigation/reload loop.
+      }
+    }
+
+    loadCurrentUser();
+
+    return () => {
+      controller.abort();
+    };
+  }, [accessToken, user, setUser]);
+
+  // Never block the whole app while /auth/me is loading.
+  return <>{children}</>;
 }

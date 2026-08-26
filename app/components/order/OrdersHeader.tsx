@@ -106,7 +106,7 @@ export default function OrdersHeader() {
                             backdrop-blur-xl
                         "
                     >
-                        PROUDUCT STORE
+                        SUPPLY STORE
                     </span>
 
                     <div

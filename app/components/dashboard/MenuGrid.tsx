@@ -37,8 +37,8 @@ const MENU_ITEMS: MenuItem[] = [
     },
     {
         icon: MembershipWelfareIcon,
-        line1: "Partner",
-        line2: "Welfare",
+        line1: "Buy",
+        line2: "Shares",
         href: ROUTES.SHARES,
     },
 ];
