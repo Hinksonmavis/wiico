@@ -1,262 +1,188 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import {
-    ChevronRight,
-    Sparkles,
-    ShoppingBag,
-    Gift,
+    ArrowRight,
+    Building2,
+    HandHeart,
+    TrendingUp,
 } from "lucide-react";
+import Link from "next/link";
+import { ROUTES } from "@/app/constants/routes";
 
 interface Slide {
     badge: string;
     title: string;
     subtitle: string;
-    image: string;
+    eyebrow: string;
+    icon: typeof Building2;
+    iconLabel: string;
 }
 
 const SLIDES: Slide[] = [
     {
-        badge: "Global Shopping",
-        title: "Premium Products\nWorldwide",
+        badge: "Purpose-Led Investing",
+        eyebrow: "BUILDING TOMORROW",
+        title: "Invest in\nRebuilding Futures",
         subtitle:
-            "Discover thousands of authentic products from trusted global brands.",
-        image: "/images/promo_items/cart_31.png",
+            "Take part in post-conflict reconstruction opportunities designed to create lasting economic impact.",
+        icon: Building2,
+        iconLabel: "Community development",
     },
     {
-        badge: "Flash Sale",
-        title: "Earn While\nYou Shop",
+        badge: "Daily Impact",
+        eyebrow: "MAKE IT COUNT",
+        title: "Your Actions\nCreate Value",
         subtitle:
-            "Invite friends, grow your referrals and unlock bigger rewards.",
-        image: "/images/promo_items/gift_box.png",
+            "Complete daily activities, grow your community and unlock added reward opportunities.",
+        icon: HandHeart,
+        iconLabel: "Positive impact",
     },
     {
-        badge: "Exclusive Rewards",
-        title: "Premium Member\nBenefits",
+        badge: "Investor Rewards",
+        eyebrow: "GROW WITH PURPOSE",
+        title: "Earn With\nPurpose",
         subtitle:
-            "Unlock cashback, bonuses and exclusive promotional campaigns.",
-        image: "/images/promo_items/cart_1.png",
+            "Build toward weekly rewards while supporting projects that help communities recover and grow.",
+        icon: TrendingUp,
+        iconLabel: "Investment growth",
     },
 ];
 
-const AUTOPLAY = 4500;
+const AUTOPLAY = 5000;
+const SWIPE_THRESHOLD = 50;
 
 export default function PromoCarousel() {
     const [index, setIndex] = useState(0);
     const [paused, setPaused] = useState(false);
-
     const touchStart = useRef<number | null>(null);
 
     useEffect(() => {
         if (paused) return;
 
-        const timer = setInterval(() => {
-            setIndex((prev) => (prev + 1) % SLIDES.length);
+        const timer = window.setInterval(() => {
+            setIndex((current) => (current + 1) % SLIDES.length);
         }, AUTOPLAY);
 
-        return () => clearInterval(timer);
+        return () => window.clearInterval(timer);
     }, [paused]);
 
-    function goTo(i: number) {
-        setIndex((i + SLIDES.length) % SLIDES.length);
+    function goTo(nextIndex: number) {
+        setIndex((nextIndex + SLIDES.length) % SLIDES.length);
     }
 
-    function onTouchStart(e: React.TouchEvent) {
-        touchStart.current = e.touches[0].clientX;
+    function onTouchStart(event: React.TouchEvent) {
+        touchStart.current = event.touches[0].clientX;
         setPaused(true);
     }
 
-    function onTouchEnd(e: React.TouchEvent) {
+    function onTouchEnd(event: React.TouchEvent) {
         if (touchStart.current === null) return;
 
-        const diff =
-            e.changedTouches[0].clientX -
-            touchStart.current;
+        const distance =
+            event.changedTouches[0].clientX - touchStart.current;
 
-        if (diff > 50) goTo(index - 1);
-
-        if (diff < -50) goTo(index + 1);
+        if (distance > SWIPE_THRESHOLD) goTo(index - 1);
+        if (distance < -SWIPE_THRESHOLD) goTo(index + 1);
 
         touchStart.current = null;
-
         setPaused(false);
     }
 
     return (
-        <section className="w-full">
+        <section
+            className="w-full"
+            aria-roledescription="carousel"
+            aria-label="WIICO highlights"
+        >
             <div
-                className="
-                    relative
-                    overflow-hidden
-                    rounded-[30px]
-                    bg-gradient-to-br
-                    from-[#EAF4FF]
-                    via-[#9BCBFF]
-                    to-[#4DA8FE]
-                    shadow-[0_25px_60px_rgba(77,168,254,.35)]
-                "
+                className="relative overflow-hidden rounded-3xl border border-slate-200 bg-[#f7fbff] shadow-[0_20px_50px_rgba(15,23,42,0.10)]"
                 onMouseEnter={() => setPaused(true)}
                 onMouseLeave={() => setPaused(false)}
                 onTouchStart={onTouchStart}
                 onTouchEnd={onTouchEnd}
             >
-                {/* Decorations */}
-
-                <div className="absolute -top-16 -right-10 h-48 w-48 rounded-full bg-white/40 blur-3xl" />
-
-                <div className="absolute bottom-0 left-0 h-28 w-28 rounded-full bg-blue-300/40 blur-2xl" />
-
-                <div className="absolute right-6 top-5 rounded-full bg-white/40 p-2 backdrop-blur-xl">
-                    <Sparkles
-                        size={18}
-                        className="text-blue-700"
-                    />
+                <div className="pointer-events-none absolute inset-0 overflow-hidden">
+                    <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-blue-200/55 blur-3xl" />
+                    <div className="absolute -bottom-32 left-[35%] h-64 w-64 rounded-full bg-cyan-100 blur-3xl" />
+                    <div className="absolute inset-0 bg-[linear-gradient(110deg,transparent_0%,rgba(255,255,255,.52)_50%,transparent_100%)]" />
                 </div>
 
                 <div
-                    className="flex transition-transform duration-500"
-                    style={{
-                        transform: `translateX(-${index * 100}%)`,
-                    }}
+                    className="flex transition-transform duration-700 ease-out"
+                    style={{ transform: `translateX(-${index * 100}%)` }}
                 >
-                    {SLIDES.map((slide, i) => (
-                        <div
-                            key={i}
-                            className="
-                                flex
-                                min-w-full
-                                items-center
-                                justify-between
-                                px-7
-                                py-7
-                            "
-                        >
-                            {/* LEFT */}
+                    {SLIDES.map((slide, slideIndex) => {
+                        const Icon = slide.icon;
 
-                            <div className="max-w-[55%]">
-                                <span
-                                    className="
-                                        inline-flex
-                                        items-center
-                                        rounded-full
-                                        bg-white/70
-                                        px-3
-                                        py-1
-                                        text-[11px]
-                                        font-semibold
-                                        text-blue-800
-                                        backdrop-blur-xl
-                                    "
-                                >
-                                    {slide.badge}
-                                </span>
+                        return (
+                            <article
+                                key={slide.badge}
+                                className="relative grid min-w-full items-center gap-8 px-6 py-7 sm:px-9 sm:py-9 md:grid-cols-[1.15fr_.85fr] md:px-12 md:py-11"
+                                aria-hidden={slideIndex !== index}
+                            >
+                                <div className="relative z-10 max-w-xl">
+                                    <div className="flex items-center gap-3">
+                                        <span className="inline-flex rounded-full border border-blue-200 bg-white/80 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-blue-700">
+                                            {slide.badge}
+                                        </span>
 
-                                <h2 className="mt-4 whitespace-pre-line text-[26px] font-bold leading-tight text-slate-900">
-                                    {slide.title}
-                                </h2>
+                                        <span className="text-[10px] font-bold tracking-[0.14em] text-slate-500">
+                                            {slide.eyebrow}
+                                        </span>
+                                    </div>
 
-                                <p className="mt-3 text-[13px] leading-6 text-slate-700">
-                                    {slide.subtitle}
-                                </p>
+                                    <h2 className="mt-5 whitespace-pre-line text-3xl font-bold leading-[1.08] tracking-[-0.04em] text-slate-950 sm:text-4xl">
+                                        {slide.title}
+                                    </h2>
 
-                                <button
-                                    className="
-                                        mt-6
-                                        inline-flex
-                                        items-center
-                                        gap-2
-                                        rounded-full
-                                        bg-slate-900
-                                        px-5
-                                        py-3
-                                        text-sm
-                                        font-semibold
-                                        text-white
-                                    "
-                                >
-                                    Explore
+                                    <p className="mt-4 max-w-md text-sm leading-6 text-slate-600 sm:text-[15px]">
+                                        {slide.subtitle}
+                                    </p>
 
-                                    <ChevronRight size={16} />
-                                </button>
-                            </div>
-
-                            {/* RIGHT */}
-
-                            <div className="relative">
-                                <div className="absolute inset-0 rounded-full bg-white/40 blur-2xl" />
-
-                                <Image
-                                    src={slide.image}
-                                    alt={slide.title}
-                                    width={190}
-                                    height={190}
-                                    className="relative object-contain drop-shadow-2xl"
-                                    priority={i === 0}
-                                />
-
-                                {/* Floating Cards */}
-
-                                <div
-                                    className="
-                                        absolute
-                                        -left-3
-                                        top-5
-                                        rounded-2xl
-                                        bg-white/80
-                                        px-3
-                                        py-2
-                                        shadow-lg
-                                        backdrop-blur-xl
-                                    "
-                                >
-                                    <ShoppingBag
-                                        size={18}
-                                        className="text-blue-600"
-                                    />
+                                    <Link
+                                        href={ROUTES.SHARES}
+                                        type="button"
+                                        className="mt-7 inline-flex items-center gap-2 rounded-xl bg-slate-950 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-900/15 transition hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200"
+                                    >
+                                        Explore WIICO
+                                        <ArrowRight size={16} aria-hidden="true" />
+                                    </Link>
                                 </div>
 
-                                <div
-                                    className="
-                                        absolute
-                                        -right-4
-                                        bottom-5
-                                        rounded-2xl
-                                        bg-white/80
-                                        px-3
-                                        py-2
-                                        shadow-lg
-                                        backdrop-blur-xl
-                                    "
-                                >
-                                    <Gift
-                                        size={18}
-                                        className="text-blue-600"
-                                    />
+                                <div className="relative z-10 hidden justify-end md:flex">
+                                    <div className="relative flex h-52 w-52 items-center justify-center rounded-[2rem] border border-white/70 bg-white/55 shadow-[0_24px_50px_rgba(37,99,235,.16)] backdrop-blur-sm">
+                                        <div className="absolute inset-5 rounded-[1.4rem] bg-gradient-to-br from-blue-600 to-cyan-400 opacity-95" />
+                                        <Icon
+                                            size={72}
+                                            strokeWidth={1.35}
+                                            className="relative text-white"
+                                            aria-label={slide.iconLabel}
+                                        />
+                                        <div className="absolute -bottom-3 -left-3 rounded-xl border border-white/80 bg-white px-3 py-2 text-xs font-bold text-slate-700 shadow-lg">
+                                            WIICO Impact
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    ))}
+                            </article>
+                        );
+                    })}
                 </div>
             </div>
 
-            {/* Indicators */}
-
-            <div className="mt-5 flex justify-center gap-2">
-                {SLIDES.map((_, i) => (
+            <div className="mt-5 flex items-center justify-center gap-2">
+                {SLIDES.map((slide, slideIndex) => (
                     <button
-                        key={i}
-                        onClick={() => goTo(i)}
-                        className={`
-                            rounded-full
-                            transition-all
-                            duration-300
-                            ${
-                                i === index
-                                    ? "h-2 w-8 bg-[#4DA8FE]"
-                                    : "h-2 w-2 bg-slate-300"
-                            }
-                        `}
+                        key={slide.badge}
+                        type="button"
+                        onClick={() => goTo(slideIndex)}
+                        aria-label={`Show slide ${slideIndex + 1}: ${slide.badge}`}
+                        aria-current={slideIndex === index}
+                        className={`h-2 rounded-full transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-blue-100 ${
+                            slideIndex === index
+                                ? "w-8 bg-blue-600"
+                                : "w-2 bg-slate-300 hover:bg-slate-400"
+                        }`}
                     />
                 ))}
             </div>
