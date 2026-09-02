@@ -3,6 +3,7 @@
 import {
     Users,
     Wallet,
+    ArrowDownToLine,
     ArrowUpCircle,
     Clock3,
     TrendingUp,
@@ -12,9 +13,21 @@ import {
 interface DashboardStatistics {
     totalUsers: number;
     activeUsers: number;
+
     pendingUpgradeRequests: number;
     pendingWithdrawals: number;
+
+    /**
+     * Money credited into the admin wallet.
+     */
     totalRevenue: number;
+
+    /**
+     * Money debited from the admin wallet
+     * and transferred to users.
+     */
+    totalAdminDebits: number;
+
     totalTransactions: number;
 }
 
@@ -23,85 +36,149 @@ interface DashboardStatsProps {
     loading?: boolean;
 }
 
+function formatCurrency(
+    value: number,
+) {
+    return `₦${Number(value ?? 0).toLocaleString(
+        "en-NG",
+        {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+        },
+    )}`;
+}
+
 export default function DashboardStats({
     statistics,
     loading = false,
 }: DashboardStatsProps) {
+
     const cards = [
         {
-            title: "Users",
+            title: "Total Users",
             value:
                 statistics?.totalUsers ?? 0,
             icon: Users,
-            color:
-                "bg-blue-500/10 text-blue-600",
+            description:
+                "Registered users",
+            iconClass:
+                "bg-blue-50 text-blue-600",
         },
+
         {
-            title: "Active",
+            title: "Active Users",
             value:
                 statistics?.activeUsers ?? 0,
             icon: TrendingUp,
-            color:
-                "bg-green-500/10 text-green-600",
+            description:
+                "Currently active",
+            iconClass:
+                "bg-emerald-50 text-emerald-600",
         },
+
         {
             title: "Revenue",
-            value: `₦${Number(
+            value: formatCurrency(
                 statistics?.totalRevenue ?? 0,
-            ).toLocaleString()}`,
+            ),
             icon: Wallet,
-            color:
-                "bg-emerald-500/10 text-emerald-600",
+            description:
+                "Admin wallet credits",
+            iconClass:
+                "bg-green-50 text-green-600",
         },
+
+        {
+            title: "Admin Debits",
+            value: formatCurrency(
+                statistics?.totalAdminDebits ?? 0,
+            ),
+            icon: ArrowDownToLine,
+            description:
+                "Sent to users",
+            iconClass:
+                "bg-amber-50 text-amber-600",
+        },
+
         {
             title: "Transactions",
             value:
-                statistics?.totalTransactions ??
-                0,
+                statistics?.totalTransactions ?? 0,
             icon: CreditCard,
-            color:
-                "bg-purple-500/10 text-purple-600",
+            description:
+                "Completed transactions",
+            iconClass:
+                "bg-purple-50 text-purple-600",
         },
+
         {
-            title: "Upgrades",
+            title: "Pending Upgrades",
             value:
-                statistics?.pendingUpgradeRequests ??
+                statistics
+                    ?.pendingUpgradeRequests ??
                 0,
             icon: ArrowUpCircle,
-            color:
-                "bg-orange-500/10 text-orange-600",
+            description:
+                "Awaiting approval",
+            iconClass:
+                "bg-orange-50 text-orange-600",
         },
+
         {
-            title: "Withdrawals",
+            title: "Pending Withdrawals",
             value:
-                statistics?.pendingWithdrawals ??
+                statistics
+                    ?.pendingWithdrawals ??
                 0,
             icon: Clock3,
-            color:
-                "bg-red-500/10 text-red-600",
+            description:
+                "Awaiting processing",
+            iconClass:
+                "bg-red-50 text-red-600",
         },
     ];
 
     return (
-        <section className="space-y-4">
+        <section className="space-y-5">
+
+            {/* =====================================================
+                HEADER
+            ===================================================== */}
+
             <div>
-                <h2 className="text-lg font-bold text-slate-900">
+                <h2 className="text-xl font-bold tracking-tight text-slate-900">
                     Overview
                 </h2>
 
-                <p className="text-sm text-slate-500">
-                    Platform statistics
+                <p className="mt-1 text-sm text-slate-500">
+                    Monitor your platform performance and wallet activity.
                 </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            {/* =====================================================
+                STAT CARDS
+            ===================================================== */}
+
+            <div
+                className="
+                    grid
+                    grid-cols-2
+                    gap-3
+                    sm:grid-cols-3
+                    lg:grid-cols-4
+                "
+            >
+
                 {cards.map((card) => {
-                    const Icon = card.icon;
+
+                    const Icon =
+                        card.icon;
 
                     return (
                         <div
                             key={card.title}
                             className="
+                                group
                                 rounded-3xl
                                 border
                                 border-slate-200
@@ -110,67 +187,115 @@ export default function DashboardStats({
                                 shadow-sm
                                 transition-all
                                 duration-300
-                                active:scale-[0.98]
+                                hover:-translate-y-0.5
+                                hover:shadow-md
                             "
                         >
+
                             {loading ? (
-                                <div className="space-y-4 animate-pulse">
-                                    <div className="h-10 w-10 rounded-xl bg-slate-200" />
+                                <div
+                                    className="
+                                        animate-pulse
+                                        space-y-4
+                                    "
+                                >
+                                    <div
+                                        className="
+                                            h-11
+                                            w-11
+                                            rounded-2xl
+                                            bg-slate-200
+                                        "
+                                    />
 
-                                    <div className="space-y-2">
-                                        <div className="h-5 w-20 rounded bg-slate-200" />
+                                    <div
+                                        className="
+                                            h-7
+                                            w-24
+                                            rounded-lg
+                                            bg-slate-200
+                                        "
+                                    />
 
-                                        <div className="h-3 w-14 rounded bg-slate-100" />
-                                    </div>
+                                    <div
+                                        className="
+                                            h-3
+                                            w-20
+                                            rounded
+                                            bg-slate-100
+                                        "
+                                    />
                                 </div>
                             ) : (
                                 <>
+                                    {/* ICON */}
+
                                     <div
                                         className={`
-                                            mb-4
                                             flex
-                                            h-12
-                                            w-12
+                                            h-11
+                                            w-11
                                             items-center
                                             justify-center
                                             rounded-2xl
-                                            ${card.color}
+                                            ${card.iconClass}
                                         `}
                                     >
                                         <Icon
-                                            size={
-                                                24
-                                            }
+                                            size={21}
+                                            strokeWidth={2}
                                         />
                                     </div>
 
+                                    {/* VALUE */}
+
                                     <h3
                                         className="
-                                            text-2xl
+                                            mt-4
+                                            break-words
+                                            text-xl
                                             font-bold
                                             tracking-tight
                                             text-slate-900
+                                            sm:text-2xl
                                         "
                                     >
                                         {card.value}
                                     </h3>
 
+                                    {/* TITLE */}
+
                                     <p
                                         className="
                                             mt-1
-                                            text-sm
-                                            font-medium
-                                            text-slate-500
+                                            text-xs
+                                            font-semibold
+                                            text-slate-700
                                         "
                                     >
                                         {card.title}
                                     </p>
+
+                                    {/* DESCRIPTION */}
+
+                                    <p
+                                        className="
+                                            mt-0.5
+                                            text-[11px]
+                                            text-slate-400
+                                        "
+                                    >
+                                        {card.description}
+                                    </p>
                                 </>
                             )}
+
                         </div>
                     );
                 })}
+
             </div>
+
         </section>
     );
 }

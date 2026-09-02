@@ -1,79 +1,92 @@
 import {
-    CreateUpgradeRequestDto,
-    UpgradeRequest,
-    UpgradeValidationResponse,
+CreateUpgradeRequestDto,
+UpgradeRequest,
+UpgradeValidationResponse,
 } from "@/app/types/clientTypes/upgrade.types";
 
 import { api } from "../api";
 
 class UpgradeService {
 
-    // Validate whether the authenticated user can upgrade to the selected membership.
+    // VALIDATE UPGRADE
+
     async validateUpgrade(
         membershipPlanId: string,
     ): Promise<UpgradeValidationResponse> {
-        const response = await api.get<{
-            success: boolean;
-            data: UpgradeValidationResponse;
-        }>(
-            `/upgrade-requests/validate/${membershipPlanId}`,
-        );
 
+        const response =
+            await api.get<{
+                success: boolean;
+                data: UpgradeValidationResponse;
+            }>(
+                `/upgrade-requests/validate/${membershipPlanId}`,
+            );
         return response.data;
     }
 
-    // Create an upgrade request.
+    // CREATE UPGRADE REQUEST
+
     async createUpgradeRequest(
         payload: CreateUpgradeRequestDto,
     ): Promise<UpgradeRequest> {
-        const response = await api.post<{
-            success: boolean;
-            data: UpgradeRequest;
-        }>(
-            "/upgrade-requests",
-            payload,
-        );
+
+        const response =
+            await api.post<{
+                success: boolean;
+                data: UpgradeRequest;
+            }>(
+                "/upgrade-requests",
+                payload,
+            );
 
         return response.data;
     }
 
-    // Retrieve the authenticated user's upgrade request history.
+    // GET UPGRADE REQUESTS
+
     async getUpgradeRequests(): Promise<
         UpgradeRequest[]
     > {
-        const response = await api.get<{
-            success: boolean;
-            data: UpgradeRequest[];
-        }>(
-            "/upgrade-requests",
-        );
+
+        const response =
+            await api.get<{
+                success: boolean;
+                data: UpgradeRequest[];
+            }>(
+                "/upgrade-requests",
+            );
 
         return response.data;
     }
 
-    // Retrieve a single upgrade requests.
+    // GET SINGLE UPGRADE REQUEST
+
     async getUpgradeRequest(
         requestId: string,
     ): Promise<UpgradeRequest> {
-        const response = await api.get<{
-            success: boolean;
-            data: UpgradeRequest;
-        }>(
-            `/upgrade-requests/${requestId}`,
-        );
+
+        const response =
+            await api.get<{
+                success: boolean;
+                data: UpgradeRequest;
+            }>(
+                `/upgrade-requests/${requestId}`,
+            );
 
         return response.data;
     }
 
-    // Cancel an existing pending upgrade request.
+    // CANCEL UPGRADE REQUEST
+
     async cancelUpgradeRequest(
         requestId: string,
     ): Promise<void> {
+
         await api.delete(
             `/upgrade-requests/${requestId}`,
         );
     }
+
 }
 
-export const upgradeService =
-    new UpgradeService();
+export const upgradeService = new UpgradeService();

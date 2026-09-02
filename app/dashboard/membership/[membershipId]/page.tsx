@@ -49,6 +49,9 @@ export default function MembershipDetailsPage() {
         refetch: validateUpgrade,
     } = useValidateUpgrade(tier?.id ?? "");
 
+    const isCurrentMembership = 
+        tier?.id === currentMembership?.id;
+
     const createUpgrade = useCreateUpgradeRequest();
 
     async function handleStartUpgrade() {
@@ -110,9 +113,6 @@ export default function MembershipDetailsPage() {
             </main>
         );
     }
-
-    const isCurrentMembership = 
-        tier?.id === currentMembership?.id;
 
     if (!tier) {
         return (

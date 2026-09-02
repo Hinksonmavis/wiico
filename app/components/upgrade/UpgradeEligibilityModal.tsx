@@ -10,6 +10,7 @@ import {
 
 import UpgradeValidationChecks from "./UpgradeValidationChecks";
 import UpgradeValidationResult from "./UpgradeValidationResult";
+import UpgradeSuccessModal from "./UpgradeSuccessModal";
 
 interface UpgradeEligibilityModalProps {
     open: boolean;
@@ -29,6 +30,7 @@ export default function UpgradeEligibilityModal({
     canUpgrade,
     checks,
     failedChecks,
+    requestSubmitted = false,
     onClose,
     onConfirm,
     onViewHistory,
@@ -76,6 +78,15 @@ export default function UpgradeEligibilityModal({
 
     if (!open) return null;
 
+    if (requestSubmitted) {
+        return (
+            <UpgradeSuccessModal
+                onClose={onClose}
+                onViewHistory={onViewHistory}
+            />
+        );
+    }
+
     return (
         <div className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm">
             <div
@@ -98,7 +109,7 @@ export default function UpgradeEligibilityModal({
                         relative shrink-0
                         overflow-hidden
                         bg-gradient-to-br
-                        from-[#1592FF]
+                        from-[#1590FC]
                         via-[#2EA4FF]
                         to-[#5DBEFF]
                         px-5
@@ -258,7 +269,7 @@ export default function UpgradeEligibilityModal({
                         >
                             <Loader2
                                 size={17}
-                                className="shrink-0 animate-spin text-[#1592FF]"
+                                className="shrink-0 animate-spin text-[#1590FC]"
                             />
 
                             <span className="text-xs font-medium text-slate-600 sm:text-sm">
@@ -305,7 +316,7 @@ export default function UpgradeEligibilityModal({
                                         h-12
                                         w-full
                                         rounded-2xl
-                                        bg-[#1592FF]
+                                        bg-[#1590FC]
                                         px-4
                                         text-sm
                                         font-semibold

@@ -257,7 +257,7 @@ export default function DepositSuccessModal({
                     <button
                         onClick={() =>
                             router.push(
-                                "/dashboard/wallet/transactions"
+                                "/dashboard/transactions"
                             )
                         }
                         className="h-14 w-full rounded-2xl bg-blue-600 text-base font-semibold text-white shadow-lg transition hover:bg-blue-700"
