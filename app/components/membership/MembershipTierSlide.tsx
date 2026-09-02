@@ -140,32 +140,54 @@ export default function MembershipTierSlide({
                 DESCRIPTION
             ===================================================== */}
             <div
-                className="
+                className={`
                     mt-6
                     rounded-2xl
-                    bg-blue-50
                     p-4
                     md:p-5
-                "
+                    ${
+                        isCurrent
+                            ? "border border-blue-100 bg-blue-50"
+                            : "bg-slate-50"
+                    }
+                `}
             >
                 {isCurrent && (
                     <div
                         className="
-                            mb-2
+                            mb-3
                             flex
                             items-center
                             gap-2
-                            text-sm
-                            font-semibold
-                            text-[#2B84E0]
                         "
                     >
-                        <CheckCircle2
-                            size={16}
-                            strokeWidth={2.5}
-                        />
+                        <div
+                            className="
+                                flex
+                                h-7
+                                w-7
+                                items-center
+                                justify-center
+                                rounded-full
+                                bg-blue-100
+                                text-[#2B84E0]
+                            "
+                        >
+                            <CheckCircle2
+                                size={15}
+                                strokeWidth={2.5}
+                            />
+                        </div>
 
-                        Basic Rights & Benefits
+                        <div>
+                            <p className="text-sm font-bold text-[#2B84E0]">
+                                Your Current Membership
+                            </p>
+
+                            <p className="text-[11px] text-blue-600/70">
+                                You are currently enjoying this plan
+                            </p>
+                        </div>
                     </div>
                 )}
 
@@ -196,7 +218,6 @@ export default function MembershipTierSlide({
                         py-3.5
                         text-sm
                         font-semibold
-                        text-white
                         transition-all
                         duration-300
                         ${
@@ -206,6 +227,7 @@ export default function MembershipTierSlide({
                                     from-[#57B4FF]
                                     via-[#349FFF]
                                     to-[#197FEF]
+                                    text-white
                                     shadow-lg
                                     shadow-blue-300/30
                                     hover:-translate-y-0.5
@@ -214,7 +236,8 @@ export default function MembershipTierSlide({
                                 `
                                 : `
                                     cursor-not-allowed
-                                    bg-slate-300
+                                    bg-slate-100
+                                    text-slate-400
                                 `
                         }
                     `}

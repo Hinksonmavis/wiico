@@ -43,7 +43,7 @@ class UpgradeRequestService {
      */
     async approveRequest(
         id: string,
-        data?: ApproveUpgradeDto,
+        data: ApproveUpgradeDto = {},
     ) {
         return api.patch<UpgradeRequestResponse>(
             `/admin/upgrade-requests/${id}/approve`,

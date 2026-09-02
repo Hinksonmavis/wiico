@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+
 import {
     Home,
     ShoppingBag,
@@ -11,6 +12,7 @@ import {
 } from "lucide-react";
 
 import { ROUTES } from "@/app/constants/routes";
+import { useChatUnread } from "@/app/hooks/clientHooks/chat/useChatUnread";
 
 const tabs = [
     {
@@ -43,6 +45,15 @@ const tabs = [
 
 export default function AppFooter() {
     const pathname = usePathname();
+
+    const {
+        total: totalUnread,
+        isLoading: isUnreadLoading,
+    } = useChatUnread();
+
+    const hasUnread =
+        !isUnreadLoading &&
+        totalUnread > 0;
 
     return (
         <footer
@@ -88,7 +99,10 @@ export default function AppFooter() {
 
                         const Icon = tab.icon;
 
-                        // Center Orders action
+                        // =====================================================
+                        // CENTER ORDERS ACTION
+                        // =====================================================
+
                         if (tab.center) {
                             return (
                                 <Link
@@ -124,6 +138,7 @@ export default function AppFooter() {
                                             duration-200
                                             ease-out
                                             active:scale-95
+
                                             ${
                                                 active
                                                     ? "scale-105 shadow-[0_12px_32px_rgba(77,168,254,0.5)]"
@@ -147,6 +162,7 @@ export default function AppFooter() {
                                             font-semibold
                                             tracking-tight
                                             transition-colors
+
                                             ${
                                                 active
                                                     ? "text-[#4DA8FE]"
@@ -159,6 +175,10 @@ export default function AppFooter() {
                                 </Link>
                             );
                         }
+
+                        // =====================================================
+                        // NORMAL NAV ITEMS
+                        // =====================================================
 
                         return (
                             <Link
@@ -184,7 +204,10 @@ export default function AppFooter() {
                                     active:scale-95
                                 "
                             >
-                                {/* Active indicator */}
+                                {/* =================================================
+                                    ACTIVE INDICATOR
+                                ================================================== */}
+
                                 <span
                                     className={`
                                         absolute
@@ -195,6 +218,7 @@ export default function AppFooter() {
                                         bg-[#4DA8FE]
                                         transition-all
                                         duration-200
+
                                         ${
                                             active
                                                 ? "scale-100 opacity-100"
@@ -203,9 +227,13 @@ export default function AppFooter() {
                                     `}
                                 />
 
-                                {/* Icon container */}
+                                {/* =================================================
+                                    ICON CONTAINER
+                                ================================================== */}
+
                                 <div
                                     className={`
+                                        relative
                                         flex
                                         h-9
                                         w-10
@@ -214,6 +242,7 @@ export default function AppFooter() {
                                         rounded-xl
                                         transition-all
                                         duration-200
+
                                         ${
                                             active
                                                 ? "bg-[#4DA8FE]/10"
@@ -231,6 +260,7 @@ export default function AppFooter() {
                                         className={`
                                             transition-colors
                                             duration-200
+
                                             ${
                                                 active
                                                     ? "text-[#4DA8FE]"
@@ -238,7 +268,34 @@ export default function AppFooter() {
                                             }
                                         `}
                                     />
+
+                                    {/* =================================================
+                                        CHAT UNREAD DOT
+                                    ================================================== */}
+
+                                    {tab.label === "Chat" &&
+                                        hasUnread && (
+                                            <span
+                                                aria-label={`${totalUnread} unread messages`}
+                                                className="
+                                                    absolute
+                                                    right-0
+                                                    top-0
+                                                    h-2.5
+                                                    w-2.5
+                                                    rounded-full
+                                                    border-2
+                                                    border-white
+                                                    bg-red-500
+                                                    shadow-sm
+                                                "
+                                            />
+                                        )}
                                 </div>
+
+                                {/* =================================================
+                                    LABEL
+                                ================================================== */}
 
                                 <span
                                     className={`
@@ -247,6 +304,7 @@ export default function AppFooter() {
                                         tracking-tight
                                         transition-colors
                                         duration-200
+
                                         ${
                                             active
                                                 ? "text-[#4DA8FE]"

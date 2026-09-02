@@ -5,7 +5,11 @@ export const ROUTES = {
 
     ORDERS: "/dashboard/order",
 
-    CHAT: "/dashboard/chat",
+    CHAT: "/dashboard/communication",
+
+    CORPORATE: "/dashboard/communication/corporate",
+    SUPPORT: "/dashboard/communication/support",
+    NOTIFICATION: "/dashboard/communication/notification",
 
     DEPOSIT: "/dashboard/wallet/deposit",
 
@@ -49,5 +53,7 @@ export const ROUTES = {
 
     ADMIN_DASHBOARD: "/admin",
 
-    ADMIN_ADVERTISEMENT: "/admin/advertisements"
+    ADMIN_ADVERTISEMENT: "/admin/advertisements",
+
+    ADMIN_SUPPORT: "/admin/support",
 } as const;

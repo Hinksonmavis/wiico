@@ -23,7 +23,7 @@ export function useApproveUpgrade() {
         onSuccess: (_, variables) => {
             queryClient.invalidateQueries({
                 queryKey: [
-                    "upgrade-request",
+                    "admin-upgrade-request",
                     variables.id,
                 ],
             });

@@ -44,7 +44,7 @@ export default function UpgradePaymentCard({
 
                 <InfoRow
                     label="Amount"
-                    value={`$${request.amount}`}
+                    value={`₦${request.amount}`}
                 />
 
                 <InfoRow

@@ -3,23 +3,23 @@
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 
-import { Withdrawal } from "@/app/types/adminTypes/withdrawal.types";
+import { Withdrawal, WithdrawalStatus } from "@/app/types/adminTypes/withdrawal.types";
 
 interface Props {
     withdrawal: Withdrawal;
 }
 
-const statusStyles: Record<string, string> = {
-    PENDING:
+const statusStyles: Record<WithdrawalStatus, string> = {
+    pending:
         "bg-amber-100 text-amber-700",
 
-    APPROVED:
+    approved:
         "bg-blue-100 text-blue-700",
 
-    REJECTED:
+    rejected:
         "bg-red-100 text-red-700",
 
-    PAID:
+    paid:
         "bg-green-100 text-green-700",
 };
 

@@ -1,9 +1,9 @@
 export type UpgradeStatus =
-    | "PENDING"
-    | "UNDER_REVIEW"
-    | "APPROVED"
-    | "REJECTED"
-    | "CANCELLED";
+    | "pending"
+    | "under_review"
+    | "approved"
+    | "rejected"
+    | "cancelled";
 
 export interface UpgradeUser {
     id: string;

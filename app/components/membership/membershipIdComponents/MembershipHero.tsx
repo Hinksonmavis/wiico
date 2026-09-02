@@ -8,11 +8,13 @@ import { MembershipTier } from "@/app/types/clientTypes/membership.types";
 interface MembershipHeroProps {
     tier: MembershipTier;
     onBack: () => void;
+    isCurrent?: boolean;
 }
 
 export default function MembershipHero({
     tier,
     onBack,
+    isCurrent = false,
 }: MembershipHeroProps) {
     return (
         <section
@@ -90,6 +92,33 @@ export default function MembershipHero({
                          name={tier.name}
                         internship={tier.isInternship}
                     />
+
+                    {isCurrent && (
+                        <div className="mt-3 flex justify-center">
+                            <span
+                                className="
+                                    inline-flex
+                                    items-center
+                                    gap-1.5
+                                    rounded-full
+                                    border
+                                    border-white/25
+                                    bg-white/15
+                                    px-3
+                                    py-1.5
+                                    text-[10px]
+                                    font-bold
+                                    uppercase
+                                    tracking-[0.14em]
+                                    text-white
+                                    backdrop-blur-md
+                                "
+                            >
+                                <span className="h-1.5 w-1.5 rounded-full bg-white" />
+                                Current Membership
+                            </span>
+                        </div>
+                    )}
                 </div>
 
                 <h1

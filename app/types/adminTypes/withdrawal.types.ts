@@ -1,8 +1,8 @@
 export type WithdrawalStatus =
-    | "PENDING"
-    | "APPROVED"
-    | "REJECTED"
-    | "PAID";
+    | "pending"
+    | "approved"
+    | "rejected"
+    | "paid";
 
 export interface WithdrawalUser {
     id: string;

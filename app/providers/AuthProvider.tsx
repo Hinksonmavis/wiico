@@ -6,75 +6,147 @@ import axiosInstance from "@/app/lib/axios";
 import { useAuthStore } from "@/app/store/auth.store";
 
 export default function AuthProvider({
-  children,
+    children,
 }: {
-  children: React.ReactNode;
+    children: React.ReactNode;
 }) {
-  const accessToken = useAuthStore(
-    (state) => state.accessToken,
-  );
 
-  const user = useAuthStore(
-    (state) => state.user,
-  );
-
-  const setUser = useAuthStore(
-    (state) => state.setUser,
-  );
-
-  useEffect(() => {
-    // Guest pages such as Login and Register should render normally.
-    if (!accessToken || user) {
-      return;
-    }
-
-    const controller = new AbortController();
-
-    async function loadCurrentUser() {
-      try {
-        const response = await axiosInstance.get(
-          "/auth/me",
-          {
-            signal: controller.signal,
-          },
+    const accessToken =
+        useAuthStore(
+            (state) =>
+                state.accessToken,
         );
 
-        if (controller.signal.aborted) {
-          return;
-        }
-
-        const currentUser = response.data?.data;
-
-        if (currentUser) {
-          setUser(currentUser);
-        } else {
-          console.error(
-            "AuthProvider: /auth/me returned no user data.",
-          );
-        }
-      } catch (error) {
-        // React development mode can cancel the first request deliberately.
-        if (controller.signal.aborted) {
-          return;
-        }
-
-        console.error(
-          "AuthProvider: failed to load current user:",
-          error,
+    const user =
+        useAuthStore(
+            (state) =>
+                state.user,
         );
 
-        // Do not call router.refresh(), location.reload(), or logout here.
-        // A failed request must not cause a navigation/reload loop.
-      }
-    }
+    const setUser =
+        useAuthStore(
+            (state) =>
+                state.setUser,
+        );
 
-    loadCurrentUser();
+    const logout =
+        useAuthStore(
+            (state) =>
+                state.logout,
+        );
 
-    return () => {
-      controller.abort();
-    };
-  }, [accessToken, user, setUser]);
+    const setAuthInitialized =
+        useAuthStore(
+            (state) =>
+                state.setAuthInitialized,
+        );
 
-  // Never block the whole app while /auth/me is loading.
-  return <>{children}</>;
+    useEffect(() => {
+
+        /*
+         * No access token means this is a guest session.
+         * Authentication restoration is complete.
+         */
+        if (!accessToken) {
+
+            setAuthInitialized(true);
+
+            return;
+        }
+
+        /*
+         * We already have the authenticated user.
+         */
+        if (user) {
+
+            setAuthInitialized(true);
+
+            return;
+        }
+
+        const controller =
+            new AbortController();
+
+        async function loadCurrentUser() {
+
+            try {
+
+                const response =
+                    await axiosInstance.get(
+                        "/auth/me",
+                        {
+                            signal:
+                                controller.signal,
+                        },
+                    );
+
+                if (
+                    controller.signal.aborted
+                ) {
+                    return;
+                }
+
+                const currentUser =
+                    response.data?.data;
+
+                if (!currentUser) {
+
+                    throw new Error(
+                        "AuthProvider: /auth/me returned no user.",
+                    );
+                }
+
+                setUser(
+                    currentUser,
+                );
+
+            } catch (error) {
+
+                if (
+                    controller.signal.aborted
+                ) {
+                    return;
+                }
+
+                console.error(
+                    "AuthProvider: failed to restore session:",
+                    error,
+                );
+
+                /*
+                 * The stored access token is no longer
+                 * sufficient to authenticate the user.
+                 *
+                 * Clear the local authentication state.
+                 */
+                logout();
+
+            } finally {
+
+                if (
+                    !controller.signal.aborted
+                ) {
+                    setAuthInitialized(
+                        true,
+                    );
+                }
+
+            }
+        }
+
+        loadCurrentUser();
+
+        return () => {
+            controller.abort();
+        };
+
+    }, [
+        accessToken,
+        user,
+        setUser,
+        logout,
+        setAuthInitialized,
+    ]);
+
+    return <>{children}</>;
 }

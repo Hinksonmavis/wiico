@@ -1,6 +1,8 @@
 "use client";
 
-import { DepositStatus } from "@/app/types/adminTypes/adminDeposit.types";
+import {
+    DepositStatus,
+} from "@/app/types/adminTypes/adminDeposit.types";
 
 interface DepositStatusBadgeProps {
     status: DepositStatus;
@@ -9,11 +11,7 @@ interface DepositStatusBadgeProps {
 export function DepositStatusBadge({
     status,
 }: DepositStatusBadgeProps) {
-
-    console.log("Deposit Status:", status);
-
     switch (status) {
-
         case DepositStatus.PENDING:
             return (
                 <span className="inline-flex items-center rounded-full border border-yellow-200 bg-yellow-100 px-3 py-1 text-xs font-semibold text-yellow-800">
@@ -42,9 +40,16 @@ export function DepositStatusBadge({
                 </span>
             );
 
+        case DepositStatus.CANCELLED:
+            return (
+                <span className="inline-flex items-center rounded-full border border-slate-200 bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
+                    Cancelled
+                </span>
+            );
+
         default:
             return (
-                <span className="inline-flex items-center rounded-full border border-gray-300 bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-700">
+                <span className="inline-flex items-center rounded-full border border-slate-200 bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
                     {String(status)}
                 </span>
             );

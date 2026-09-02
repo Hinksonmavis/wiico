@@ -15,12 +15,18 @@ interface AuthState {
 
     isAuthenticated: boolean;
 
+    isAuthInitialized: boolean;
+
     isAdmin: boolean;
 
     isUser: boolean;
 
     setUser: (
         user: User | null,
+    ) => void;
+
+    setAuthInitialized: (
+        value: boolean,
     ) => void;
 
     login: (
@@ -44,6 +50,8 @@ export const useAuthStore =
 
                 isAuthenticated: false,
 
+                isAuthInitialized: false,
+
                 isAdmin: false,
 
                 isUser: false,
@@ -54,13 +62,19 @@ export const useAuthStore =
                         user,
 
                         isAdmin:
-                            user?.role ===
-                            "admin",
+                            user?.role === "admin",
 
                         isUser:
-                            user?.role ===
-                            "user",
+                            user?.role === "user",
 
+                    }),
+
+                setAuthInitialized: (
+                    value,
+                ) =>
+                    set({
+                        isAuthInitialized:
+                            value,
                     }),
 
                 login: (
@@ -73,7 +87,11 @@ export const useAuthStore =
 
                         refreshToken,
 
-                        isAuthenticated: true,
+                        isAuthenticated:
+                            true,
+
+                        isAuthInitialized:
+                            false,
 
                     }),
 
@@ -87,6 +105,9 @@ export const useAuthStore =
                         refreshToken: null,
 
                         isAuthenticated: false,
+
+                        isAuthInitialized:
+                            true,
 
                         isAdmin: false,
 

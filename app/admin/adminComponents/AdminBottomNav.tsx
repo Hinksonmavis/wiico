@@ -9,6 +9,7 @@ import {
     ClipboardList,
     Menu,
     Wallet,
+    MessageCircle,
 } from "lucide-react";
 
 interface AdminBottomNavProps {
@@ -35,8 +36,13 @@ const NAV_ITEMS: NavItem[] = [
     },
     {
         label: "Wallet",
-        href:"/admin/wallet",
-        icon:Wallet,
+        href: "/admin/wallet",
+        icon: Wallet,
+    },
+    {
+        label: "Support",
+        href: "/admin/support",
+        icon: MessageCircle,
     },
     {
         label: "Requests",
@@ -131,9 +137,7 @@ export default function AdminBottomNav({
                                 `}
                             >
 
-                                <Icon
-                                    size={20}
-                                />
+                                <Icon size={20} />
 
                                 {!!item.badge && (
                                     <span
@@ -205,9 +209,7 @@ export default function AdminBottomNav({
                         "
                     >
 
-                        <Menu
-                            size={20}
-                        />
+                        <Menu size={20} />
 
                     </div>
 
@@ -226,7 +228,5 @@ export default function AdminBottomNav({
             </div>
 
         </nav>
-
     );
-
 }

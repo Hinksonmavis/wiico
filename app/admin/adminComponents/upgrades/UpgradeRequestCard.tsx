@@ -31,7 +31,7 @@ export default function UpgradeRequestCard({
 }: Props) {
     return (
         <Link
-            href={`/admin/upgrades/${request.id}`}
+            href={`/admin/upgrade-requests/${request.id}`}
             className="
                 rounded-3xl
                 border
@@ -74,7 +74,7 @@ export default function UpgradeRequestCard({
                             </span>
 
                             <span className="font-semibold text-slate-900">
-                                ${request.amount}
+                                ₦{request.amount}
                             </span>
                         </div>
 

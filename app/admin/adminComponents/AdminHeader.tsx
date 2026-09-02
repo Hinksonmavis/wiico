@@ -18,6 +18,8 @@ const PAGE_TITLES: Record<string, string> = {
 
     "/admin/users": "Users",
 
+    "/admin/support": "Support",
+
     "/admin/upgrade-requests":
         "Upgrade Requests",
 
@@ -31,7 +33,7 @@ const PAGE_TITLES: Record<string, string> = {
         "Daily Order Config",
 
     "/admin/advertisements":
-        "Transactions",
+        "Advertisements",
 
     "/admin/transactions":
         "Transactions",

@@ -7,19 +7,19 @@ interface Props {
 }
 
 const statusStyles: Record<string, string> = {
-    PENDING:
+    pending:
         "bg-amber-100 text-amber-700",
 
-    UNDER_REVIEW:
+    under_review:
         "bg-blue-100 text-blue-700",
 
-    APPROVED:
+    approved:
         "bg-green-100 text-green-700",
 
-    REJECTED:
+    rejected:
         "bg-red-100 text-red-700",
 
-    CANCELLED:
+    cancelled:
         "bg-slate-100 text-slate-700",
 };
 
@@ -76,7 +76,7 @@ export default function UpgradeMembershipCard({
 
                 <InfoRow
                     label="Upgrade Amount"
-                    value={`$${request.amount}`}
+                    value={`₦${request.amount}`}
                 />
 
                 <div className="flex items-center justify-between border-b border-slate-100 pb-3 last:border-b-0">

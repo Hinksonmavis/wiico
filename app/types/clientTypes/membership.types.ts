@@ -22,3 +22,10 @@ export interface MembershipTier {
     isInternship: boolean;
     canUpgradeTo: boolean;
 }
+
+export interface CurrentMembership {
+    id: string;
+    slug: string;
+    name: string;
+    sortOrder: number;
+}

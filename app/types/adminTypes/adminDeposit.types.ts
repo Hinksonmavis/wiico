@@ -1,8 +1,9 @@
 export enum DepositStatus {
-    PENDING = "PENDING",
-    UNDER_REVIEW = "UNDER_REVIEW",
-    APPROVED = "APPROVED",
-    DECLINED = "DECLINED",
+    PENDING = "pending",
+    UNDER_REVIEW = "under_review",
+    APPROVED = "approved",
+    DECLINED = "declined",
+    CANCELLED = "cancelled",
 }
 
 export interface AdminDepositMembership {

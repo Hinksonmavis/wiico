@@ -6,21 +6,85 @@ import { useRouter } from "next/navigation";
 import MembershipTierSlider from "@/app/components/membership/MembershipTierSlider";
 
 import { ROUTES } from "@/app/constants/routes";
+
 import { useMemberships } from "@/app/hooks/clientHooks/membershipHooks/useMemberships";
+import { useCurrentMembership } from "@/app/hooks/clientHooks/membershipHooks/useCurrentMembership";
 
 export default function MembershipPage() {
     const router = useRouter();
 
     const {
         data: tiers = [],
-        isLoading,
-        isError,
+        isLoading: membershipsLoading,
+        isError: membershipsError,
     } = useMemberships();
 
-    // console.log(tiers);
+    const {
+        data: currentMembership,
+        isLoading: currentMembershipLoading,
+        isError: currentMembershipError,
+    } = useCurrentMembership();
+
+    const isLoading =
+        membershipsLoading ||
+        currentMembershipLoading;
+
+    const isError =
+        membershipsError ||
+        currentMembershipError;
+
+    if (isLoading) {
+        return (
+            <main className="flex min-h-screen items-center justify-center bg-slate-50 px-4">
+                <div className="w-full max-w-sm text-center">
+                    <div className="mx-auto h-12 w-12 animate-pulse rounded-2xl bg-slate-200" />
+
+                    <p className="mt-4 text-sm font-medium text-slate-500">
+                        Loading memberships...
+                    </p>
+                </div>
+            </main>
+        );
+    }
+
+    if (isError) {
+        return (
+            <main className="flex min-h-screen items-center justify-center bg-slate-50 px-4">
+                <div className="w-full max-w-sm rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+                    <h2 className="text-lg font-bold text-slate-900">
+                        Unable to load memberships
+                    </h2>
+
+                    <p className="mt-2 text-sm leading-6 text-slate-500">
+                        We couldn't retrieve your membership
+                        information. Please try again.
+                    </p>
+
+                    <button
+                        type="button"
+                        onClick={() => window.location.reload()}
+                        className="
+                            mt-6
+                            rounded-2xl
+                            bg-[#1592FF]
+                            px-5
+                            py-3
+                            text-sm
+                            font-semibold
+                            text-white
+                            transition
+                            active:scale-95
+                        "
+                    >
+                        Try Again
+                    </button>
+                </div>
+            </main>
+        );
+    }
 
     return (
-        <main className=" bg-slate-50 overflow-x-hidden">
+        <main className="overflow-x-hidden bg-slate-50">
             {/* Hero */}
             <section
                 className="
@@ -31,11 +95,11 @@ export default function MembershipPage() {
                     via-[#4DA8FE]
                     to-[#0E8FFF]
                     px-4
-                    sm:px-6
-                    pt-8
-                    sm:scroll-pt-10
                     pb-24
+                    pt-8
+                    sm:px-6
                     sm:pb-32
+                    sm:pt-10
                 "
             >
                 {/* Top Glow */}
@@ -56,8 +120,8 @@ export default function MembershipPage() {
                 <div
                     className="
                         absolute
+                        -bottom-10
                         -left-20
-                        bottom-20
                         h-12
                         w-12
                         rounded-full
@@ -80,7 +144,6 @@ export default function MembershipPage() {
                     "
                 />
 
-                {/* Content */}
                 <div className="relative z-10">
                     {/* Back Button */}
                     <button
@@ -108,7 +171,10 @@ export default function MembershipPage() {
                             active:scale-95
                         "
                     >
-                        <ArrowLeft size={20} strokeWidth={2.2} />
+                        <ArrowLeft
+                            size={20}
+                            strokeWidth={2.2}
+                        />
                     </button>
 
                     <div className="flex flex-col items-center text-center">
@@ -133,7 +199,7 @@ export default function MembershipPage() {
                         </span>
 
                         <h1 className="mt-5 text-3xl font-bold tracking-tight text-white">
-                            Upgrade Your Membership
+                            Your Membership
                         </h1>
 
                         <p
@@ -145,8 +211,39 @@ export default function MembershipPage() {
                                 text-blue-50/95
                             "
                         >
-                            Unlock higher daily earnings, bigger referral rewards, and more order opportunities.
+                            View your current membership and
+                            explore higher plans with greater
+                            earning opportunities.
                         </p>
+
+                        {/* Current Membership Summary */}
+                        {currentMembership && (
+                            <div
+                                className="
+                                    mt-5
+                                    inline-flex
+                                    items-center
+                                    gap-2
+                                    rounded-full
+                                    border
+                                    border-white/20
+                                    bg-white/15
+                                    px-4
+                                    py-2.5
+                                    backdrop-blur-xl
+                                "
+                            >
+                                <span className="h-2 w-2 rounded-full bg-white" />
+
+                                <span className="text-xs font-medium text-white/80">
+                                    Current Plan:
+                                </span>
+
+                                <span className="text-xs font-bold text-white">
+                                    {currentMembership.name}
+                                </span>
+                            </div>
+                        )}
                     </div>
                 </div>
 
@@ -184,16 +281,19 @@ export default function MembershipPage() {
                 />
             </section>
 
-            {/* Slider */}
+            {/* Membership Slider */}
             <section className="-mt-16 px-4 pb-10">
                 <MembershipTierSlider
-                        tiers={tiers}
-                        onJoin={(slug) =>
-                            router.push(
-                                `${ROUTES.MEMBERS}/${slug}`
-                            )
-                        }
-                    />
+                    tiers={tiers}
+                    currentMembershipId={
+                        currentMembership?.id
+                    }
+                    onJoin={(slug) =>
+                        router.push(
+                            `${ROUTES.MEMBERS}/${slug}`,
+                        )
+                    }
+                />
             </section>
         </main>
     );

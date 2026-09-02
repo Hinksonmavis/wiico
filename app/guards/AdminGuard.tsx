@@ -1,7 +1,14 @@
 "use client";
 
-import { ReactNode, useEffect } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import {
+    ReactNode,
+    useEffect,
+} from "react";
+
+import {
+    usePathname,
+    useRouter,
+} from "next/navigation";
 
 import { ROUTES } from "@/app/constants/routes";
 import { useAuthStore } from "@/app/store/auth.store";
@@ -16,18 +23,27 @@ export default function AdminGuard({
 
     const router = useRouter();
 
-    const pathname = usePathname();
+    const pathname =
+        usePathname();
 
     const {
         user,
         isAuthenticated,
+        isAuthInitialized,
     } = useAuthStore();
 
     useEffect(() => {
 
-        /**
-         * Wait until AuthProvider
-         * finishes restoring the session.
+        /*
+         * Do nothing until authentication
+         * restoration has completed.
+         */
+        if (!isAuthInitialized) {
+            return;
+        }
+
+        /*
+         * No authenticated session.
          */
         if (!isAuthenticated) {
 
@@ -38,16 +54,30 @@ export default function AdminGuard({
             );
 
             return;
-
         }
 
-        /**
-         * Authenticated but not an admin.
+        /*
+         * Authenticated but user information
+         * is unavailable.
+         *
+         * AuthProvider should normally prevent
+         * this state, but fail safely if it occurs.
          */
-        if (
-            user &&
-            user.role !== "admin"
-        ) {
+        if (!user) {
+
+            router.replace(
+                `${ROUTES.ADMIN_LOGIN}?redirect=${encodeURIComponent(
+                    pathname,
+                )}`,
+            );
+
+            return;
+        }
+
+        /*
+         * Authenticated user is not an admin.
+         */
+        if (user.role !== "admin") {
 
             router.replace(
                 ROUTES.DASHBOARD,
@@ -56,22 +86,19 @@ export default function AdminGuard({
         }
 
     }, [
+        isAuthInitialized,
         isAuthenticated,
         user,
         pathname,
         router,
     ]);
 
-    /**
-     * AuthProvider is still loading the user.
+    /*
+     * Authentication is still being restored.
      */
-    if (
-        isAuthenticated &&
-        !user
-    ) {
+    if (!isAuthInitialized) {
 
         return (
-
             <div
                 className="
                     flex
@@ -79,6 +106,7 @@ export default function AdminGuard({
                     items-center
                     justify-center
                     bg-gray-50
+                    px-6
                 "
             >
 
@@ -87,8 +115,8 @@ export default function AdminGuard({
                     <div
                         className="
                             mx-auto
-                            h-12
-                            w-12
+                            h-10
+                            w-10
                             animate-spin
                             rounded-full
                             border-4
@@ -99,12 +127,13 @@ export default function AdminGuard({
 
                     <h2
                         className="
-                            mt-6
-                            text-lg
+                            mt-5
+                            text-base
                             font-semibold
+                            text-gray-900
                         "
                     >
-                        Loading...
+                        Verifying administrator session
                     </h2>
 
                     <p
@@ -114,17 +143,20 @@ export default function AdminGuard({
                             text-gray-500
                         "
                     >
-                        Verifying administrator session...
+                        Please wait...
                     </p>
 
                 </div>
 
             </div>
-
         );
-
     }
 
+    /*
+     * After initialization, do not render
+     * protected content unless the user is
+     * definitely an admin.
+     */
     if (
         !isAuthenticated ||
         !user ||
@@ -132,9 +164,7 @@ export default function AdminGuard({
     ) {
 
         return null;
-
     }
 
     return <>{children}</>;
-
 }

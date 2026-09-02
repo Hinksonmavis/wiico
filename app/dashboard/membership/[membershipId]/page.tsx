@@ -20,6 +20,7 @@ import { PaymentMethod } from "@/app/types/clientTypes/upgrade.types";
 import { useMembership } from "@/app/hooks/clientHooks/membershipHooks/useMembership";
 import { useValidateUpgrade } from "@/app/hooks/clientHooks/upgradeHooks/useValidateUpgrade";
 import { useCreateUpgradeRequest } from "@/app/hooks/clientHooks/upgradeHooks/useCreateUpgradeRequest";
+import { useCurrentMembership } from "@/app/hooks/clientHooks/membershipHooks/useCurrentMembership";
 
 export default function MembershipDetailsPage() {
     const router = useRouter();
@@ -34,6 +35,11 @@ export default function MembershipDetailsPage() {
 
     const { data: tier, isLoading } = useMembership(slug);
 
+    const {
+        data: currentMembership,
+        isLoading: currentMembershipLoading,
+    } = useCurrentMembership();
+
     const [open, setOpen] = useState(false);
     const [requestSubmitted, setRequestSubmitted] =
         useState(false);
@@ -46,7 +52,7 @@ export default function MembershipDetailsPage() {
     const createUpgrade = useCreateUpgradeRequest();
 
     async function handleStartUpgrade() {
-        if (!tier) return;
+        if (!tier || isCurrentMembership) return;
 
         setRequestSubmitted(false);
         setOpen(true);
@@ -95,7 +101,7 @@ export default function MembershipDetailsPage() {
         router.push(ROUTES.UPGRADE_HISTORY);
     }
 
-    if (isLoading) {
+    if (isLoading || currentMembershipLoading) {
         return (
             <main className="flex min-h-screen items-center justify-center bg-slate-50">
                 <p className="text-sm text-slate-500">
@@ -104,6 +110,9 @@ export default function MembershipDetailsPage() {
             </main>
         );
     }
+
+    const isCurrentMembership = 
+        tier?.id === currentMembership?.id;
 
     if (!tier) {
         return (
@@ -135,6 +144,7 @@ export default function MembershipDetailsPage() {
             <main className="min-h-screen bg-slate-50">
                 <MembershipHero
                     tier={tier}
+                    isCurrent={isCurrentMembership}
                     onBack={() => router.back()}
                 />
 
@@ -147,11 +157,13 @@ export default function MembershipDetailsPage() {
 
                     <MembershipRequirements tier={tier} />
 
-                    <UpgradeActionCard
-                        loading={createUpgrade.isPending}
-                        disabled={false}
-                        onUpgrade={handleStartUpgrade}
-                    />
+                    {!isCurrentMembership && (
+                        <UpgradeActionCard
+                            loading={createUpgrade.isPending}
+                            disabled={!tier.canUpgradeTo}
+                            onUpgrade={handleStartUpgrade}
+                        />
+                    )}
                 </section>
             </main>
 
